@@ -11,14 +11,15 @@
   <main class="app" aria-label="SizeKit 设计尺寸画板">
     <section class="workspace" aria-label="尺寸画布">
       <header class="workspace-topbar">
-        <div class="header-main">
+        <div class="header-platforms" aria-label="选择平台或物料">
+          <div class="platform-fixed platform-all-slot" id="platformAllSlot"></div>
+          <div class="header-marquee" id="platformCenter" aria-label="选择平台或物料">
+            <nav class="platform-nav" id="platformNav" aria-label="选择平台或物料"></nav>
+          </div>
+          <div class="platform-hover-title" id="platformHoverTitle" aria-hidden="true"></div>
           <div class="header-actions">
             <button class="theme-action" id="themeToggle" type="button" aria-label="切换背景">◐</button>
           </div>
-        </div>
-        <div class="header-marquee" aria-label="选择平台或物料">
-          <nav class="platform-nav" id="platformNav" aria-label="选择平台或物料"></nav>
-          <div class="platform-hover-title" id="platformHoverTitle" aria-hidden="true"></div>
         </div>
       </header>
 

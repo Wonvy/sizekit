@@ -41,6 +41,7 @@ const sortOptions = [
 
 const BOARD_SIZE_FONT_MIN = 9;
 const BOARD_SIZE_FONT_MAX = 18;
+const PREVIEW_IMAGE_MAX_EDGE = 1600;
 const IMAGE_CACHE_DB = "sizekit-image-cache";
 const IMAGE_CACHE_STORE = "cache";
 const IMAGE_CACHE_KEY = "dropped-images";
@@ -61,6 +62,8 @@ const state = {
 };
 
 const els = {
+  platformAllSlot: document.querySelector("#platformAllSlot"),
+  platformCenter: document.querySelector("#platformCenter"),
   platformNav: document.querySelector("#platformNav"),
   platformHoverTitle: document.querySelector("#platformHoverTitle"),
   filterStrip: document.querySelector("#filterStrip"),
@@ -179,6 +182,7 @@ function bindEvents() {
 }
 
 function renderNav() {
+  const allPlatform = getPlatform("all");
   const items = navPlatforms();
   const renderButton = item => `
     <button class="platform-button ${item.id === state.selectedPlatform ? "is-active" : ""}" data-platform="${item.id}" data-label="${item.name}" type="button" aria-label="${item.name}">
@@ -186,9 +190,10 @@ function renderNav() {
     </button>
   `;
 
+  els.platformAllSlot.innerHTML = renderButton(allPlatform);
   els.platformNav.innerHTML = items.map(renderButton).join("");
 
-  els.platformNav.querySelectorAll("button").forEach(button => {
+  [...els.platformAllSlot.querySelectorAll("button"), ...els.platformNav.querySelectorAll("button")].forEach(button => {
     button.addEventListener("mouseenter", () => showPlatformTitle(button));
     button.addEventListener("focus", () => showPlatformTitle(button));
     button.addEventListener("mouseleave", hidePlatformTitle);
@@ -199,7 +204,7 @@ function renderNav() {
 }
 
 function showPlatformTitle(button) {
-  const navRect = els.platformNav.parentElement.getBoundingClientRect();
+  const navRect = els.platformHoverTitle.parentElement.getBoundingClientRect();
   const buttonRect = button.getBoundingClientRect();
   els.platformHoverTitle.textContent = button.dataset.label;
   els.platformHoverTitle.style.left = `${buttonRect.left + buttonRect.width / 2 - navRect.left}px`;
@@ -222,7 +227,7 @@ function platformLoopItems() {
 }
 
 function navPlatforms() {
-  return platforms.filter(item => !printPlatformIds.has(item.id));
+  return platforms.filter(item => item.id !== "all" && !printPlatformIds.has(item.id));
 }
 
 function platformIconMarkup(platform) {
@@ -329,7 +334,7 @@ function renderFilters() {
 
   els.filterStrip.querySelector("#imageToggle").addEventListener("change", event => {
     state.showImages = event.target.checked;
-    render();
+    requestAnimationFrame(render);
   });
 
   els.filterStrip.querySelector("#sizeToggle").addEventListener("change", event => {
@@ -348,14 +353,14 @@ function renderFilters() {
 }
 
 function ratioSwatchStyle(ratio) {
-  if (!ratio) return "";
-  const max = 30;
+  if (!ratio) return "--ratio-w:76px; --ratio-h:34px";
+  const max = 58;
   let w = max;
   let h = max;
   if (ratio >= 1) {
-    h = Math.max(10, Math.round(max / ratio));
+    h = Math.max(28, Math.round(max / ratio));
   } else {
-    w = Math.max(10, Math.round(max * ratio));
+    w = Math.max(34, Math.round(max * ratio));
   }
   return `--ratio-w:${w}px; --ratio-h:${h}px`;
 }
@@ -387,14 +392,14 @@ function maxPlatformOffset() {
 }
 
 function updatePlatformActiveState() {
-  els.platformNav.querySelectorAll(".platform-button").forEach(button => {
+  [...els.platformAllSlot.querySelectorAll(".platform-button"), ...els.platformNav.querySelectorAll(".platform-button")].forEach(button => {
     button.classList.toggle("is-active", button.dataset.platform === state.selectedPlatform);
   });
 }
 
 function syncPlatformCarousel({ immediate = false } = {}) {
   requestAnimationFrame(() => {
-    const wrapper = els.platformNav.parentElement;
+    const wrapper = els.platformCenter;
     const buttons = Array.from(els.platformNav.querySelectorAll(".platform-button"));
     state.platformOffset = Math.max(0, Math.min(maxPlatformOffset(), state.platformOffset));
     const offsetButton = buttons[state.platformOffset];
@@ -589,7 +594,7 @@ function updateThemeToggle() {
 function renderPreview(preview) {
   const style = `--preview-w:${preview.w}px; --preview-h:${preview.h}px; --preview-x:${preview.x}px; --preview-y:${preview.y}px`;
   return `
-    <div class="preview-clip"><img src="${preview.image.url}" alt="" style="${style}"></div>
+    <div class="preview-clip"><img src="${preview.image.url}" alt="" loading="lazy" decoding="async" style="${style}"></div>
   `;
 }
 
@@ -678,13 +683,16 @@ function loadDroppedImage(file) {
   return new Promise(resolve => {
     const reader = new FileReader();
     const image = new Image();
-    image.onload = () => resolve({
-      url: image.src,
-      name: file.name,
-      width: image.naturalWidth,
-      height: image.naturalHeight,
-      ratio: image.naturalWidth / image.naturalHeight
-    });
+    image.onload = () => {
+      const url = previewImageUrl(image, file.type);
+      resolve({
+        url,
+        name: file.name,
+        width: image.naturalWidth,
+        height: image.naturalHeight,
+        ratio: image.naturalWidth / image.naturalHeight
+      });
+    };
     image.onerror = () => resolve(null);
     reader.onload = () => {
       if (typeof reader.result !== "string") {
@@ -696,6 +704,23 @@ function loadDroppedImage(file) {
     reader.onerror = () => resolve(null);
     reader.readAsDataURL(file);
   });
+}
+
+function previewImageUrl(image, type) {
+  const maxEdge = Math.max(image.naturalWidth, image.naturalHeight);
+  if (maxEdge <= PREVIEW_IMAGE_MAX_EDGE) return image.src;
+
+  const scale = PREVIEW_IMAGE_MAX_EDGE / maxEdge;
+  const canvas = document.createElement("canvas");
+  canvas.width = Math.round(image.naturalWidth * scale);
+  canvas.height = Math.round(image.naturalHeight * scale);
+  const context = canvas.getContext("2d", { alpha: true });
+  if (!context) return image.src;
+
+  context.imageSmoothingEnabled = true;
+  context.imageSmoothingQuality = "high";
+  context.drawImage(image, 0, 0, canvas.width, canvas.height);
+  return canvas.toDataURL(type === "image/png" ? "image/png" : "image/jpeg", .86);
 }
 
 function openImageCache() {
@@ -717,11 +742,11 @@ function openImageCache() {
 async function loadCachedImages() {
   try {
     const db = await openImageCache();
-    if (!db) return loadLocalCachedImages();
-    return await imageCacheRequest(db, "readonly", store => store.get(IMAGE_CACHE_KEY)) || [];
+    if (!db) return await normalizeCachedImages(loadLocalCachedImages());
+    return await normalizeCachedImages(await imageCacheRequest(db, "readonly", store => store.get(IMAGE_CACHE_KEY)) || []);
   } catch (error) {
     console.warn("Failed to load cached images", error);
-    return loadLocalCachedImages();
+    return await normalizeCachedImages(loadLocalCachedImages());
   }
 }
 
@@ -754,6 +779,33 @@ function saveLocalCachedImages(images) {
   } catch (error) {
     console.warn("Failed to write local image cache", error);
   }
+}
+
+async function normalizeCachedImages(images) {
+  if (!Array.isArray(images) || !images.length) return [];
+
+  const normalized = await Promise.all(images.map(normalizeCachedImage));
+  const validImages = normalized.filter(Boolean);
+  if (validImages.some((image, index) => image.url !== images[index]?.url)) {
+    await saveCachedImages(validImages);
+  }
+  return validImages;
+}
+
+function normalizeCachedImage(cachedImage) {
+  if (!cachedImage || !cachedImage.url) return Promise.resolve(null);
+  return new Promise(resolve => {
+    const image = new Image();
+    image.onload = () => resolve({
+      ...cachedImage,
+      url: previewImageUrl(image, cachedImage.url.startsWith("data:image/png") ? "image/png" : "image/jpeg"),
+      width: cachedImage.width || image.naturalWidth,
+      height: cachedImage.height || image.naturalHeight,
+      ratio: cachedImage.ratio || image.naturalWidth / image.naturalHeight
+    });
+    image.onerror = () => resolve(null);
+    image.src = cachedImage.url;
+  });
 }
 
 function imageCacheRequest(db, mode, createRequest) {

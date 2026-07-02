@@ -96,6 +96,62 @@
       "iconUrl": "https://www.pinterest.com/favicon.ico"
     },
     {
+      "id": "threads",
+      "name": "Threads",
+      "short": "Th",
+      "color": "#111111",
+      "category": "????",
+      "iconUrl": "https://www.threads.net/favicon.ico"
+    },
+    {
+      "id": "snapchat",
+      "name": "Snapchat",
+      "short": "SC",
+      "color": "#FFFC00",
+      "category": "????",
+      "iconUrl": "https://www.snapchat.com/favicon.ico"
+    },
+    {
+      "id": "google-business",
+      "name": "Google ??",
+      "short": "G",
+      "color": "#4285F4",
+      "category": "????",
+      "iconUrl": "https://www.google.com/favicon.ico"
+    },
+    {
+      "id": "behance",
+      "name": "Behance",
+      "short": "Be",
+      "color": "#1769FF",
+      "category": "????",
+      "iconUrl": "https://www.behance.net/favicon.ico"
+    },
+    {
+      "id": "dribbble",
+      "name": "Dribbble",
+      "short": "Db",
+      "color": "#EA4C89",
+      "category": "????",
+      "iconUrl": "https://dribbble.com/favicon.ico"
+    },
+    {
+      "id": "bilibili",
+      "name": "Bilibili",
+      "short": "B",
+      "color": "#00A1D6",
+      "category": "?????",
+      "iconUrl": "https://www.bilibili.com/favicon.ico"
+    },
+    {
+      "id": "weibo",
+      "name": "??",
+      "short": "?",
+      "color": "#E6162D",
+      "category": "?????",
+      "iconUrl": "https://weibo.com/favicon.ico"
+    },
+    {
       "id": "print",
       "name": "印刷物料",
       "short": "印",
@@ -1312,6 +1368,390 @@
         "超宽"
       ],
       "dpi": 150
+    },
+    {
+      "id": "threads-profile",
+      "platformId": "threads",
+      "title": "??",
+      "width": 320,
+      "height": 320,
+      "unit": "px",
+      "ratio": "1:1",
+      "bleed": "?????????",
+      "note": "Threads ??????????????????",
+      "tags": [
+        "??",
+        "??"
+      ],
+      "dpi": null
+    },
+    {
+      "id": "threads-post-portrait",
+      "platformId": "threads",
+      "title": "?????",
+      "width": 1080,
+      "height": 1350,
+      "unit": "px",
+      "ratio": "4:5",
+      "bleed": "????????????",
+      "note": "????????????",
+      "tags": [
+        "???",
+        "??"
+      ],
+      "dpi": null
+    },
+    {
+      "id": "threads-post-square",
+      "platformId": "threads",
+      "title": "?????",
+      "width": 1080,
+      "height": 1080,
+      "unit": "px",
+      "ratio": "1:1",
+      "bleed": "???????????",
+      "note": "?????????",
+      "tags": [
+        "???",
+        "??"
+      ],
+      "dpi": null
+    },
+    {
+      "id": "threads-link",
+      "platformId": "threads",
+      "title": "?????",
+      "width": 1200,
+      "height": 628,
+      "unit": "px",
+      "ratio": "? 1.91:1",
+      "bleed": "??????????",
+      "note": "?????????????",
+      "tags": [
+        "??",
+        "??"
+      ],
+      "dpi": null
+    },
+    {
+      "id": "snapchat-profile",
+      "platformId": "snapchat",
+      "title": "??",
+      "width": 320,
+      "height": 320,
+      "unit": "px",
+      "ratio": "1:1",
+      "bleed": "?????????",
+      "note": "Snapchat ???????",
+      "tags": [
+        "??",
+        "??"
+      ],
+      "dpi": null
+    },
+    {
+      "id": "snapchat-story",
+      "platformId": "snapchat",
+      "title": "Story / Geofilter",
+      "width": 1080,
+      "height": 1920,
+      "unit": "px",
+      "ratio": "9:16",
+      "bleed": "??????????",
+      "note": "Snapchat Story???????????????",
+      "tags": [
+        "Story",
+        "??"
+      ],
+      "dpi": null
+    },
+    {
+      "id": "snapchat-ad",
+      "platformId": "snapchat",
+      "title": "????",
+      "width": 1080,
+      "height": 1920,
+      "unit": "px",
+      "ratio": "9:16",
+      "bleed": "?? UI ???????????",
+      "note": "????????????",
+      "tags": [
+        "??",
+        "??"
+      ],
+      "dpi": null
+    },
+    {
+      "id": "google-business-logo",
+      "platformId": "google-business",
+      "title": "?? Logo",
+      "width": 720,
+      "height": 720,
+      "unit": "px",
+      "ratio": "1:1",
+      "bleed": "?????????????",
+      "note": "Google ???? Logo ???????",
+      "tags": [
+        "Logo",
+        "??"
+      ],
+      "dpi": null
+    },
+    {
+      "id": "google-business-cover",
+      "platformId": "google-business",
+      "title": "????",
+      "width": 1024,
+      "height": 576,
+      "unit": "px",
+      "ratio": "16:9",
+      "bleed": "??????????????",
+      "note": "???????????",
+      "tags": [
+        "??",
+        "??"
+      ],
+      "dpi": null
+    },
+    {
+      "id": "google-business-post",
+      "platformId": "google-business",
+      "title": "????",
+      "width": 720,
+      "height": 720,
+      "unit": "px",
+      "ratio": "1:1",
+      "bleed": "???????????",
+      "note": "??????????????",
+      "tags": [
+        "??",
+        "??"
+      ],
+      "dpi": null
+    },
+    {
+      "id": "behance-cover",
+      "platformId": "behance",
+      "title": "????",
+      "width": 808,
+      "height": 632,
+      "unit": "px",
+      "ratio": "? 4:3",
+      "bleed": "??????????????",
+      "note": "Behance ?????????????",
+      "tags": [
+        "??",
+        "??"
+      ],
+      "dpi": null
+    },
+    {
+      "id": "behance-project-image",
+      "platformId": "behance",
+      "title": "?????",
+      "width": 1400,
+      "height": 1000,
+      "unit": "px",
+      "ratio": "7:5",
+      "bleed": "?? 1400px ???????",
+      "note": "?? Behance ????????",
+      "tags": [
+        "??",
+        "???"
+      ],
+      "dpi": null
+    },
+    {
+      "id": "behance-banner",
+      "platformId": "behance",
+      "title": "?????",
+      "width": 1400,
+      "height": 560,
+      "unit": "px",
+      "ratio": "5:2",
+      "bleed": "??????????",
+      "note": "?????????????",
+      "tags": [
+        "??",
+        "???"
+      ],
+      "dpi": null
+    },
+    {
+      "id": "dribbble-shot",
+      "platformId": "dribbble",
+      "title": "Shot ???",
+      "width": 1600,
+      "height": 1200,
+      "unit": "px",
+      "ratio": "4:3",
+      "bleed": "?????????????",
+      "note": "Dribbble ?? Shot ?????????",
+      "tags": [
+        "Shot",
+        "??"
+      ],
+      "dpi": null
+    },
+    {
+      "id": "dribbble-thumbnail",
+      "platformId": "dribbble",
+      "title": "Shot ???",
+      "width": 800,
+      "height": 600,
+      "unit": "px",
+      "ratio": "4:3",
+      "bleed": "????????????",
+      "note": "Dribbble ????????",
+      "tags": [
+        "???",
+        "??"
+      ],
+      "dpi": null
+    },
+    {
+      "id": "dribbble-wide",
+      "platformId": "dribbble",
+      "title": "????",
+      "width": 1400,
+      "height": 1050,
+      "unit": "px",
+      "ratio": "4:3",
+      "bleed": "????????????",
+      "note": "? 4:3 ????????????",
+      "tags": [
+        "??",
+        "??"
+      ],
+      "dpi": null
+    },
+    {
+      "id": "bilibili-cover",
+      "platformId": "bilibili",
+      "title": "????",
+      "width": 1146,
+      "height": 717,
+      "unit": "px",
+      "ratio": "? 16:10",
+      "bleed": "??????????",
+      "note": "Bilibili ???????????",
+      "tags": [
+        "??",
+        "??"
+      ],
+      "dpi": null
+    },
+    {
+      "id": "bilibili-cover-16-9",
+      "platformId": "bilibili",
+      "title": "??????",
+      "width": 1920,
+      "height": 1080,
+      "unit": "px",
+      "ratio": "16:9",
+      "bleed": "??????????",
+      "note": "????????????????",
+      "tags": [
+        "??",
+        "??"
+      ],
+      "dpi": null
+    },
+    {
+      "id": "bilibili-avatar",
+      "platformId": "bilibili",
+      "title": "??",
+      "width": 400,
+      "height": 400,
+      "unit": "px",
+      "ratio": "1:1",
+      "bleed": "?????????",
+      "note": "UP ????????",
+      "tags": [
+        "??",
+        "??"
+      ],
+      "dpi": null
+    },
+    {
+      "id": "bilibili-dynamic",
+      "platformId": "bilibili",
+      "title": "????",
+      "width": 1080,
+      "height": 1080,
+      "unit": "px",
+      "ratio": "1:1",
+      "bleed": "??????????",
+      "note": "??????????????",
+      "tags": [
+        "??",
+        "??"
+      ],
+      "dpi": null
+    },
+    {
+      "id": "weibo-avatar",
+      "platformId": "weibo",
+      "title": "??",
+      "width": 400,
+      "height": 400,
+      "unit": "px",
+      "ratio": "1:1",
+      "bleed": "?????????",
+      "note": "?????????",
+      "tags": [
+        "??",
+        "??"
+      ],
+      "dpi": null
+    },
+    {
+      "id": "weibo-cover",
+      "platformId": "weibo",
+      "title": "????",
+      "width": 920,
+      "height": 300,
+      "unit": "px",
+      "ratio": "? 3.07:1",
+      "bleed": "????????????",
+      "note": "?????????????",
+      "tags": [
+        "??",
+        "??"
+      ],
+      "dpi": null
+    },
+    {
+      "id": "weibo-post-square",
+      "platformId": "weibo",
+      "title": "????",
+      "width": 1080,
+      "height": 1080,
+      "unit": "px",
+      "ratio": "1:1",
+      "bleed": "??????????",
+      "note": "????????????",
+      "tags": [
+        "??",
+        "??"
+      ],
+      "dpi": null
+    },
+    {
+      "id": "weibo-post-long",
+      "platformId": "weibo",
+      "title": "??",
+      "width": 1080,
+      "height": 1920,
+      "unit": "px",
+      "ratio": "9:16",
+      "bleed": "??????????????",
+      "note": "?????????????",
+      "tags": [
+        "??",
+        "??"
+      ],
+      "dpi": null
     }
   ]
 }
