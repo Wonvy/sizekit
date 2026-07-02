@@ -155,6 +155,8 @@ let activePreset = null;
 let hoverFrame = 0;
 let hoveredCard = null;
 let hoverClearTimer = 0;
+let platformDrag = null;
+let suppressPlatformClick = false;
 let dragDepth = 0;
 let hasRenderedBoards = false;
 let imageRenderVersion = 0;
@@ -251,7 +253,11 @@ function bindEvents() {
     els.platformSelect.removeAttribute("open");
   });
   els.platformSelectSummary.addEventListener("click", event => {
-    if (window.matchMedia("(hover: hover)").matches) event.preventDefault();
+    if (window.matchMedia("(hover: hover)").matches) {
+      event.preventDefault();
+      return;
+    }
+    els.platformSelect.toggleAttribute("open");
   });
   els.platformSelectSummary.addEventListener("focus", () => {
     els.platformSelect.setAttribute("open", "");
@@ -296,12 +302,22 @@ function bindEvents() {
     document.body.classList.remove("is-dragging");
     await handleImageDrop(event.dataTransfer);
   });
+  document.addEventListener("click", event => {
+    if (!els.platformSelect.contains(event.target)) {
+      els.platformSelect.removeAttribute("open");
+    }
+  });
 
   els.platformNav.parentElement.addEventListener("wheel", event => {
     event.preventDefault();
     const direction = event.deltaY || event.deltaX;
     scrollPlatformPage(direction > 0 ? 1 : -1);
   }, { passive: false });
+
+  els.platformNav.parentElement.addEventListener("pointerdown", startPlatformDrag);
+  els.platformNav.parentElement.addEventListener("pointermove", movePlatformDrag);
+  els.platformNav.parentElement.addEventListener("pointerup", endPlatformDrag);
+  els.platformNav.parentElement.addEventListener("pointercancel", endPlatformDrag);
 }
 
 function renderNav() {
@@ -321,7 +337,15 @@ function renderNav() {
     button.addEventListener("focus", () => showPlatformTitle(button));
     button.addEventListener("mouseleave", hidePlatformTitle);
     button.addEventListener("blur", hidePlatformTitle);
-    button.addEventListener("click", () => activatePlatform(button.dataset.platform));
+    button.addEventListener("click", event => {
+      if (suppressPlatformClick) {
+        event.preventDefault();
+        event.stopPropagation();
+        suppressPlatformClick = false;
+        return;
+      }
+      activatePlatform(button.dataset.platform);
+    });
   });
   syncPlatformCarousel({ immediate: true });
 }
@@ -407,6 +431,15 @@ function platformIcon(id) {
   return icons[id] || icons.all;
 }
 
+function controlIcon(id) {
+  const icons = {
+    image: `<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 6.5A2.5 2.5 0 0 1 7.5 4h9A2.5 2.5 0 0 1 19 6.5v11A2.5 2.5 0 0 1 16.5 20h-9A2.5 2.5 0 0 1 5 17.5v-11Zm2 0v8.1l2.4-2.4 2.4 2.3 3.1-3.8L17 13.3V6.5a.5.5 0 0 0-.5-.5h-9a.5.5 0 0 0-.5.5Zm10 9.9-2.1-2.7-2.9 3.6-2.5-2.4L7 17.4v.1c0 .3.2.5.5.5h9a.5.5 0 0 0 .5-.5v-1.1ZM9.4 8a1.4 1.4 0 1 1 0 2.8 1.4 1.4 0 0 1 0-2.8Z"/></svg>`,
+    size: `<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 6h16v12H4V6Zm2 2v8h12V8H6Zm2.1 2h7.8v1.7H8.1V10Zm0 3h5.2v1.6H8.1V13Z"/></svg>`,
+    sort: `<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 4h2v12.2l2.3-2.3 1.4 1.4L8 20l-4.7-4.7 1.4-1.4L7 16.2V4Zm7 1h7v2h-7V5Zm0 6h5v2h-5v-2Zm0 6h3v2h-3v-2Z"/></svg>`
+  };
+  return icons[id] || "";
+}
+
 function renderFilters() {
   const ratio = ratioFilters.find(item => item.id === state.ratioFilter) || ratioFilters[0];
   const sort = sortOptions.find(item => item.id === state.sortMode) || sortOptions[0];
@@ -424,14 +457,16 @@ function renderFilters() {
     </details>
     <label class="image-toggle">
       <input id="imageToggle" type="checkbox" ${state.showImages ? "checked" : ""}>
-      <span>${ui("showImages")}</span>
+      <span class="toggle-icon">${controlIcon("image")}</span>
+      <span class="control-text">${ui("showImages")}</span>
     </label>
     <label class="image-toggle">
       <input id="sizeToggle" type="checkbox" ${state.showSizes ? "checked" : ""}>
-      <span>${ui("showSizes")}</span>
+      <span class="toggle-icon">${controlIcon("size")}</span>
+      <span class="control-text">${ui("showSizes")}</span>
     </label>
     <details class="filter-menu sort-menu">
-      <summary>${labelText(sort)}</summary>
+      <summary><span class="control-icon sort-icon">${controlIcon("sort")}</span><span class="control-text">${labelText(sort)}</span></summary>
       <div class="filter-menu-panel">
         ${sortOptions.map(option => `
           <button class="filter-option ${option.id === state.sortMode ? "is-active" : ""}" type="button" data-sort-mode="${option.id}">${labelText(option)}</button>
@@ -495,19 +530,51 @@ function activatePlatform(platformId) {
 }
 
 function scrollPlatformPage(direction) {
-  const nextOffset = state.platformOffset + direction * platformPageSize();
+  const step = Math.max(1, els.platformCenter.clientWidth * .82);
+  const nextOffset = state.platformOffset + direction * step;
   state.platformOffset = Math.max(0, Math.min(maxPlatformOffset(), nextOffset));
   syncPlatformCarousel();
 }
 
-function platformPageSize() {
-  const wrapper = els.platformNav.parentElement;
-  const step = Number.parseFloat(getComputedStyle(wrapper).getPropertyValue("--icon-step")) || 62;
-  return Math.max(1, Math.floor(wrapper.clientWidth / step));
+function startPlatformDrag(event) {
+  if (event.button !== undefined && event.button !== 0) return;
+  platformDrag = {
+    pointerId: event.pointerId,
+    startX: event.clientX,
+    startY: event.clientY,
+    startOffset: state.platformOffset,
+    moved: false
+  };
+  els.platformCenter.setPointerCapture?.(event.pointerId);
+  els.platformCenter.classList.add("is-drag-ready");
+}
+
+function movePlatformDrag(event) {
+  if (!platformDrag || platformDrag.pointerId !== event.pointerId) return;
+  const dx = event.clientX - platformDrag.startX;
+  const dy = event.clientY - platformDrag.startY;
+  if (!platformDrag.moved && Math.abs(dx) < 6) return;
+  if (!platformDrag.moved && Math.abs(dy) > Math.abs(dx) * 1.2) return;
+
+  event.preventDefault();
+  platformDrag.moved = true;
+  suppressPlatformClick = true;
+  els.platformCenter.classList.add("is-dragging");
+  const nextOffset = platformDrag.startOffset - dx;
+  state.platformOffset = Math.max(0, Math.min(maxPlatformOffset(), nextOffset));
+  syncPlatformCarousel({ immediate: true });
+}
+
+function endPlatformDrag(event) {
+  if (!platformDrag || platformDrag.pointerId !== event.pointerId) return;
+  els.platformCenter.releasePointerCapture?.(event.pointerId);
+  els.platformCenter.classList.remove("is-drag-ready", "is-dragging");
+  if (!platformDrag.moved) suppressPlatformClick = false;
+  platformDrag = null;
 }
 
 function maxPlatformOffset() {
-  return Math.max(0, navPlatforms().length - platformPageSize());
+  return Math.max(0, els.platformNav.scrollWidth - els.platformCenter.clientWidth);
 }
 
 function updatePlatformActiveState() {
@@ -521,12 +588,10 @@ function syncPlatformCarousel({ immediate = false } = {}) {
     const wrapper = els.platformCenter;
     const buttons = Array.from(els.platformNav.querySelectorAll(".platform-button"));
     state.platformOffset = Math.max(0, Math.min(maxPlatformOffset(), state.platformOffset));
-    const offsetButton = buttons[state.platformOffset];
-    const buttonLeft = offsetButton ? offsetButton.offsetLeft : 0;
     const navWidth = els.platformNav.scrollWidth;
     const centerOffset = maxPlatformOffset() === 0 ? Math.max(0, (wrapper.clientWidth - navWidth) / 2) : 0;
     els.platformNav.classList.toggle("no-transition", immediate);
-    els.platformNav.style.transform = `translateX(${Math.round(centerOffset - buttonLeft)}px)`;
+    els.platformNav.style.transform = `translateX(${(centerOffset - state.platformOffset).toFixed(2)}px)`;
 
     buttons.forEach(button => {
       button.style.setProperty("--edge-scale", "1");
