@@ -155,6 +155,7 @@ let activePreset = null;
 let hoverFrame = 0;
 let hoveredCard = null;
 let hoverClearTimer = 0;
+let temporaryPlatformHighlight = null;
 let platformDrag = null;
 let suppressPlatformClick = false;
 let dragDepth = 0;
@@ -227,6 +228,10 @@ function bindEvents() {
     state.query = event.target.value.trim().toLowerCase();
     render();
   });
+  window.addEventListener("resize", () => {
+    updatePlatformActiveState();
+    syncPlatformCarousel({ immediate: true });
+  });
 
   els.themeToggle.addEventListener("click", () => {
     state.theme = state.theme === "dark" ? "light" : "dark";
@@ -257,10 +262,13 @@ function bindEvents() {
       event.preventDefault();
       return;
     }
+    event.stopPropagation();
     els.platformSelect.toggleAttribute("open");
   });
   els.platformSelectSummary.addEventListener("focus", () => {
-    els.platformSelect.setAttribute("open", "");
+    if (window.matchMedia("(hover: hover)").matches) {
+      els.platformSelect.setAttribute("open", "");
+    }
   });
   els.platformSelect.addEventListener("focusout", event => {
     if (!els.platformSelect.contains(event.relatedTarget)) {
@@ -321,18 +329,17 @@ function bindEvents() {
 }
 
 function renderNav() {
-  const allPlatform = getPlatform("all");
   const items = navPlatforms();
   const renderButton = item => `
-    <button class="platform-button ${item.id === state.selectedPlatform ? "is-active" : ""}" data-platform="${item.id}" data-label="${item.name}" type="button" aria-label="${item.name}">
+    <button class="platform-button ${isPlatformButtonActive(item.id) ? "is-active" : ""}" data-platform="${item.id}" data-label="${item.name}" type="button" aria-label="${item.name}">
       <span class="icon-badge platform-icon platform-icon--${item.id} ${item.iconUrl ? "official-icon" : ""}" style="${item.iconUrl ? `--fallback-color:${item.color}` : `background:${item.color}`}" aria-hidden="true">${platformIconMarkup(item)}</span>
     </button>
   `;
 
-  els.platformAllSlot.innerHTML = renderButton(allPlatform);
+  els.platformAllSlot.innerHTML = "";
   els.platformNav.innerHTML = items.map(renderButton).join("");
 
-  [...els.platformAllSlot.querySelectorAll("button"), ...els.platformNav.querySelectorAll("button")].forEach(button => {
+  els.platformNav.querySelectorAll("button").forEach(button => {
     button.addEventListener("mouseenter", () => showPlatformTitle(button));
     button.addEventListener("focus", () => showPlatformTitle(button));
     button.addEventListener("mouseleave", hidePlatformTitle);
@@ -578,9 +585,18 @@ function maxPlatformOffset() {
 }
 
 function updatePlatformActiveState() {
-  [...els.platformAllSlot.querySelectorAll(".platform-button"), ...els.platformNav.querySelectorAll(".platform-button")].forEach(button => {
-    button.classList.toggle("is-active", button.dataset.platform === state.selectedPlatform);
+  els.platformNav.querySelectorAll(".platform-button").forEach(button => {
+    button.classList.toggle("is-active", isPlatformButtonActive(button.dataset.platform));
   });
+}
+
+function isPlatformButtonActive(platformId) {
+  if (temporaryPlatformHighlight) return platformId === temporaryPlatformHighlight;
+  return platformId === state.selectedPlatform && !isMobileAllPlatformState(platformId);
+}
+
+function isMobileAllPlatformState(platformId) {
+  return platformId === "all" && window.matchMedia("(max-width: 760px)").matches;
 }
 
 function syncPlatformCarousel({ immediate = false } = {}) {
@@ -762,9 +778,10 @@ function createBoardCard(item, index, renderKey) {
     const size = boardSize(item.width, item.height, 170, item.unit);
     const preview = previewForPreset(item, size);
     const detail = [platform.name, sourcePlatform.id !== platform.id ? sourcePlatform.name : "", ...item.tags].filter(Boolean).join(" / ");
+    const showTitleIcon = !shouldHideCardPlatformIcon();
   const template = document.createElement("template");
   template.innerHTML = `
-      <button class="artboard-card" data-id="${item.id}" type="button" aria-label="${platform.name} ${item.title} ${formatSize(item)}" style="--card-index:${index}; view-transition-name:${cardTransitionName(item.id)}">
+      <button class="artboard-card" data-id="${item.id}" data-highlight-platform="${item.platformId}" type="button" aria-label="${platform.name} ${item.title} ${formatSize(item)}" style="--card-index:${index}; view-transition-name:${cardTransitionName(item.id)}">
         <div class="artboard-stage" style="--tooltip-offset:${Math.round(size.h / 2 + 8)}px">
           <div class="board-tooltip">${detail}</div>
           <div class="artboard ${preview ? "has-preview" : ""} ${state.showSizes ? "" : "hide-size"}" data-ratio="${item.ratio}" style="--board-w:${size.w}px; --board-h:${size.h}px; --size-font:${size.font}px">
@@ -774,7 +791,7 @@ function createBoardCard(item, index, renderKey) {
         </div>
         <div class="board-info">
           <div class="board-title-row">
-            <span class="title-icon platform-icon platform-icon--${platform.id} ${platform.iconUrl ? "official-icon" : ""}" style="${platform.iconUrl ? `--fallback-color:${platform.color}` : `background:${platform.color}`}" title="${platform.name}">${platformIconMarkup(platform)}</span>
+            ${showTitleIcon ? `<span class="title-icon platform-icon platform-icon--${platform.id} ${platform.iconUrl ? "official-icon" : ""}" style="${platform.iconUrl ? `--fallback-color:${platform.color}` : `background:${platform.color}`}" title="${platform.name}">${platformIconMarkup(platform)}</span>` : ""}
             <strong>${item.title}</strong>
           </div>
         </div>
@@ -803,8 +820,10 @@ function setHoveredCard(card) {
   window.clearTimeout(hoverClearTimer);
   if (hoveredCard && hoveredCard !== card) hoveredCard.classList.remove("is-card-hovered");
   hoveredCard = card;
+  temporaryPlatformHighlight = card.dataset.highlightPlatform || null;
   els.artboardGrid.classList.add("is-card-hovering");
   card.classList.add("is-card-hovered");
+  updatePlatformActiveState();
 }
 
 function scheduleHoverClear(card) {
@@ -819,7 +838,9 @@ function clearHoveredCard() {
   window.clearTimeout(hoverClearTimer);
   if (hoveredCard) hoveredCard.classList.remove("is-card-hovered");
   hoveredCard = null;
+  temporaryPlatformHighlight = null;
   els.artboardGrid.classList.remove("is-card-hovering");
+  updatePlatformActiveState();
 }
 
 function clearBoardPreviews() {
@@ -831,8 +852,13 @@ function cardRenderKey(item) {
   return [
     item.id,
     state.showImages ? imageRenderVersion : "no-images",
-    state.showSizes ? "sizes" : "no-sizes"
+    state.showSizes ? "sizes" : "no-sizes",
+    shouldHideCardPlatformIcon() ? "no-title-icon" : "title-icon"
   ].join(":");
+}
+
+function shouldHideCardPlatformIcon() {
+  return state.selectedPlatform !== "all" && state.selectedPlatform !== "print" && !printPlatformIds.has(state.selectedPlatform);
 }
 
 function cardTransitionName(id) {

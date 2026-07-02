@@ -38,6 +38,10 @@
 }
 
 * { box-sizing: border-box; }
+*:not(input):not(textarea) {
+  user-select: none;
+  -webkit-user-select: none;
+}
 html[data-loading="true"] .app {
   opacity: 0;
 }
@@ -328,19 +332,16 @@ input {
 .header-platforms {
   position: relative;
   display: grid;
-  grid-template-columns: 58px minmax(0, var(--content-w));
+  grid-template-columns: minmax(0, var(--content-w));
   align-items: center;
-  column-gap: 14px;
-  width: min(calc(var(--content-w) + 86px), 100%);
+  column-gap: 0;
+  width: min(var(--content-w), 100%);
   min-width: 0;
   height: 58px;
   margin: 0 auto;
 }
 .platform-fixed {
-  position: relative;
-  z-index: 92;
-  width: 58px;
-  height: 58px;
+  display: none;
 }
 .header-marquee {
   --icon-step: 62px;
@@ -517,6 +518,17 @@ h1 {
   visibility: visible;
   transform: translateY(0);
   pointer-events: auto;
+}
+@media (hover: none) {
+  .platform-select:hover:not([open]) .platform-select-trigger::after {
+    transform: rotate(45deg) translate(-1px, -1px);
+  }
+  .platform-select:hover:not([open]) .platform-select-panel {
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(-4px);
+    pointer-events: none;
+  }
 }
 .platform-select-option {
   display: inline-flex;
@@ -1249,12 +1261,14 @@ h1 {
   .workspace { height: auto; min-height: 100vh; }
   .workspace-topbar { min-height: 84px; padding: 14px 16px 6px; }
   .header-platforms {
-    grid-template-columns: 46px minmax(0, 1fr);
-    column-gap: 10px;
+    grid-template-columns: minmax(0, 1fr);
+    column-gap: 0;
     width: 100%;
     height: 48px;
   }
-  .platform-fixed,
+  .platform-fixed {
+    display: none;
+  }
   .platform-button {
     width: 40px;
     height: 40px;
@@ -1396,6 +1410,13 @@ h1 {
   .sort-menu .filter-menu-panel {
     left: auto;
     right: 0;
+  }
+  .artboard-grid.is-card-hovering .artboard-card:not(.is-card-hovered) {
+    opacity: 1;
+    filter: none;
+  }
+  .artboard-grid.is-card-hovering .artboard-card:not(.is-card-hovered)::after {
+    opacity: 0;
   }
   .canvas { padding: 16px 16px 96px; }
   .artboard-grid {
