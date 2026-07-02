@@ -26,6 +26,7 @@ const UI_TEXT = {
     switchLight: "切换浅色主题",
     switchDark: "切换深色主题",
     switchLanguage: "切换语言",
+    chooseImages: "选择本地图片",
     languageButton: "中文",
     sizeDetail: "尺寸详情",
     size: "尺寸",
@@ -58,6 +59,7 @@ const UI_TEXT = {
     switchLight: "Switch to light theme",
     switchDark: "Switch to dark theme",
     switchLanguage: "Switch language",
+    chooseImages: "Choose local images",
     languageButton: "EN",
     sizeDetail: "Size details",
     size: "Size",
@@ -127,6 +129,8 @@ const els = {
   filterStrip: document.querySelector("#filterStrip"),
   searchInput: document.querySelector("#searchInput"),
   artboardGrid: document.querySelector("#artboardGrid"),
+  imageFileInput: document.querySelector("#imageFileInput"),
+  imageFileButton: document.querySelector("#imageFileButton"),
   themeToggle: document.querySelector("#themeToggle"),
   languageToggle: document.querySelector("#languageToggle"),
   dialog: document.querySelector("#detailDialog"),
@@ -192,6 +196,8 @@ function applyLanguage() {
   els.searchInput.placeholder = ui("searchSize");
   els.searchInput.closest("label")?.setAttribute("aria-label", ui("searchSize"));
   els.filterStrip.setAttribute("aria-label", state.language === "zh" ? "尺寸过滤器" : "Size filters");
+  els.imageFileButton.setAttribute("aria-label", ui("chooseImages"));
+  els.imageFileButton.title = ui("chooseImages");
   els.languageToggle.setAttribute("aria-label", ui("switchLanguage"));
   els.languageToggle.title = ui("switchLanguage");
   els.detailTitle.textContent = ui("sizeDetail");
@@ -237,6 +243,15 @@ function bindEvents() {
   });
   window.addEventListener("scroll", updateMobileTopMode, { passive: true });
 
+  els.imageFileButton.addEventListener("click", () => {
+    els.imageFileInput.click();
+  });
+  els.imageFileInput.addEventListener("change", async event => {
+    const files = Array.from(event.target.files || []);
+    await handleImageFiles(files);
+    event.target.value = "";
+  });
+
   els.themeToggle.addEventListener("click", () => {
     state.theme = state.theme === "dark" ? "light" : "dark";
     document.documentElement.dataset.theme = state.theme;
@@ -252,7 +267,6 @@ function bindEvents() {
     renderPlatformSelect();
     renderFilters();
     render();
-    if (activePreset && els.dialog.open) openDetail(activePreset.id);
   });
 
   els.platformSelect.addEventListener("mouseenter", () => {
@@ -357,7 +371,7 @@ function renderNav() {
   const items = navPlatforms();
   const renderButton = item => `
     <button class="platform-button ${isPlatformButtonActive(item.id) ? "is-active" : ""}" data-platform="${item.id}" data-label="${item.name}" type="button" aria-label="${item.name}">
-      <span class="icon-badge platform-icon platform-icon--${item.id} ${item.iconUrl ? "official-icon" : ""}" style="${item.iconUrl ? `--fallback-color:${item.color}` : `background:${item.color}`}" aria-hidden="true">${platformIconMarkup(item)}</span>
+      <span class="icon-badge platform-icon platform-icon--${item.id} ${hasOfficialPlatformIcon(item) ? "official-icon" : ""} ${hasSvgPlatformIcon(item) ? "svg-data-icon" : ""}" style="${hasOfficialPlatformIcon(item) ? `--fallback-color:${item.color}` : `background:${item.color}`}" aria-hidden="true">${platformIconMarkup(item)}</span>
     </button>
   `;
 
@@ -374,6 +388,12 @@ function renderNav() {
         event.preventDefault();
         event.stopPropagation();
         suppressPlatformClick = false;
+        return;
+      }
+      const platform = getPlatform(button.dataset.platform);
+      if ((event.ctrlKey || event.metaKey) && platformWebsiteUrl(platform)) {
+        event.preventDefault();
+        window.open(platformWebsiteUrl(platform), "_blank", "noopener,noreferrer");
         return;
       }
       activatePlatform(button.dataset.platform);
@@ -403,14 +423,15 @@ function renderPlatformSelect() {
 function platformSelectOptionMarkup(platform, extraClass = "") {
   const iconStyle = platform.id === "all"
     ? ""
-    : platform.iconUrl ? `--fallback-color:${platform.color}` : `background:${platform.color}`;
+    : hasOfficialPlatformIcon(platform) ? `--fallback-color:${platform.color}` : `background:${platform.color}`;
   return `
-    <span class="platform-select-icon platform-icon platform-icon--${platform.id} ${platform.iconUrl ? "official-icon" : ""} ${extraClass}" style="${iconStyle}">${platformIconMarkup(platform)}</span>
+    <span class="platform-select-icon platform-icon platform-icon--${platform.id} ${hasOfficialPlatformIcon(platform) ? "official-icon" : ""} ${hasSvgPlatformIcon(platform) ? "svg-data-icon" : ""} ${extraClass}" style="${iconStyle}">${platformIconMarkup(platform)}</span>
     <span class="platform-select-name">${platform.name}</span>
   `;
 }
 
 function showPlatformTitle(button) {
+  if (window.matchMedia("(max-width: 760px)").matches) return;
   const navRect = els.platformHoverTitle.parentElement.getBoundingClientRect();
   const buttonRect = button.getBoundingClientRect();
   els.platformHoverTitle.textContent = button.dataset.label;
@@ -438,11 +459,39 @@ function navPlatforms() {
 }
 
 function platformIconMarkup(platform) {
+  const svgMarkup = platformSvgMarkup(platform);
+  if (svgMarkup) return svgMarkup;
+
   if (platform.iconUrl) {
     return `<img src="${platform.iconUrl}" alt="" loading="lazy" referrerpolicy="no-referrer" onerror="this.parentElement.classList.add('icon-fallback'); this.replaceWith(document.createTextNode('${platform.short}'))">`;
   }
 
   return platformIcon(platform.id);
+}
+
+function platformSvgMarkup(platform) {
+  const rawSvg = platform.iconSvg || platform.svg || platform.svgData || platform.iconData;
+  if (typeof rawSvg !== "string") return "";
+  const svg = rawSvg.trim();
+  if (!svg) return "";
+  if (svg.startsWith("<svg")) return svg;
+  if (svg.startsWith("data:image/svg+xml")) {
+    return `<img src="${svg}" alt="" loading="lazy" referrerpolicy="no-referrer">`;
+  }
+  return "";
+}
+
+function hasSvgPlatformIcon(platform) {
+  return Boolean(platformSvgMarkup(platform));
+}
+
+function hasOfficialPlatformIcon(platform) {
+  return Boolean(platform.iconUrl || hasSvgPlatformIcon(platform));
+}
+
+function platformWebsiteUrl(platform) {
+  if (!platform || platform.id === "print" || printPlatformIds.has(platform.id)) return "";
+  return platform.websiteUrl || platform.url || platform.homepage || "";
 }
 
 function platformIcon(id) {
@@ -468,8 +517,8 @@ function platformIcon(id) {
 
 function controlIcon(id) {
   const icons = {
-    image: `<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 6.5A2.5 2.5 0 0 1 7.5 4h9A2.5 2.5 0 0 1 19 6.5v11A2.5 2.5 0 0 1 16.5 20h-9A2.5 2.5 0 0 1 5 17.5v-11Zm2 0v8.1l2.4-2.4 2.4 2.3 3.1-3.8L17 13.3V6.5a.5.5 0 0 0-.5-.5h-9a.5.5 0 0 0-.5.5Zm10 9.9-2.1-2.7-2.9 3.6-2.5-2.4L7 17.4v.1c0 .3.2.5.5.5h9a.5.5 0 0 0 .5-.5v-1.1ZM9.4 8a1.4 1.4 0 1 1 0 2.8 1.4 1.4 0 0 1 0-2.8Z"/></svg>`,
-    size: `<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 6h16v12H4V6Zm2 2v8h12V8H6Zm2.1 2h7.8v1.7H8.1V10Zm0 3h5.2v1.6H8.1V13Z"/></svg>`,
+    image: `<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 5h14v14H5V5Zm2 2v8.4l3-3 2.4 2.2 2.5-3.1L17 14.2V7H7Zm10 9.7-2.1-2.7-2.3 2.8-2.5-2.3L7.7 17H17v-.3ZM9.4 8.5a1.3 1.3 0 1 1 0 2.6 1.3 1.3 0 0 1 0-2.6Z"/></svg>`,
+    size: `<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M11 4h2.5L20 20h-2.6l-1.5-3.8H8.5L7 20H4.5L11 4Zm-1.6 10h5.7L12.3 6.8 9.4 14Z"/></svg>`,
     sort: `<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 4h2v12.2l2.3-2.3 1.4 1.4L8 20l-4.7-4.7 1.4-1.4L7 16.2V4Zm7 1h7v2h-7V5Zm0 6h5v2h-5v-2Zm0 6h3v2h-3v-2Z"/></svg>`
   };
   return icons[id] || "";
@@ -554,14 +603,15 @@ function ratioSwatchStyle(ratio) {
 }
 
 function activatePlatform(platformId) {
-  if (state.selectedPlatform === platformId) return;
+  const isSamePlatform = state.selectedPlatform === platformId;
   state.selectedPlatform = platformId;
+  temporaryPlatformHighlight = null;
 
   clearTimeout(hoverFrame);
   updatePlatformActiveState();
   renderPlatformSelect();
   hidePlatformTitle();
-  render();
+  if (!isSamePlatform) render();
 }
 
 function scrollPlatformPage(direction) {
@@ -580,7 +630,6 @@ function startPlatformDrag(event) {
     startOffset: state.platformOffset,
     moved: false
   };
-  els.platformCenter.setPointerCapture?.(event.pointerId);
   els.platformCenter.classList.add("is-drag-ready");
 }
 
@@ -588,10 +637,13 @@ function movePlatformDrag(event) {
   if (!platformDrag || platformDrag.pointerId !== event.pointerId) return;
   const dx = event.clientX - platformDrag.startX;
   const dy = event.clientY - platformDrag.startY;
-  if (!platformDrag.moved && Math.abs(dx) < 6) return;
+  if (!platformDrag.moved && Math.abs(dx) < 12) return;
   if (!platformDrag.moved && Math.abs(dy) > Math.abs(dx) * 1.2) return;
 
   event.preventDefault();
+  if (!platformDrag.moved) {
+    els.platformCenter.setPointerCapture?.(event.pointerId);
+  }
   platformDrag.moved = true;
   suppressPlatformClick = true;
   els.platformCenter.classList.add("is-dragging");
@@ -602,9 +654,16 @@ function movePlatformDrag(event) {
 
 function endPlatformDrag(event) {
   if (!platformDrag || platformDrag.pointerId !== event.pointerId) return;
-  els.platformCenter.releasePointerCapture?.(event.pointerId);
+  if (els.platformCenter.hasPointerCapture?.(event.pointerId)) {
+    els.platformCenter.releasePointerCapture?.(event.pointerId);
+  }
   els.platformCenter.classList.remove("is-drag-ready", "is-dragging");
   if (!platformDrag.moved) suppressPlatformClick = false;
+  if (platformDrag.moved) {
+    window.setTimeout(() => {
+      suppressPlatformClick = false;
+    }, 180);
+  }
   platformDrag = null;
 }
 
@@ -653,12 +712,16 @@ function render() {
     hasRenderedBoards = true;
   };
 
-  if (!hasRenderedBoards || typeof document.startViewTransition !== "function") {
+  if (!hasRenderedBoards || isMobileViewport() || typeof document.startViewTransition !== "function") {
     update();
     return;
   }
 
   document.startViewTransition(update);
+}
+
+function isMobileViewport() {
+  return window.matchMedia("(max-width: 760px)").matches;
 }
 
 function activeFilterLabels() {
@@ -819,7 +882,7 @@ function createBoardCard(item, index, renderKey) {
         </div>
         <div class="board-info">
           <div class="board-title-row">
-            ${showTitleIcon ? `<span class="title-icon platform-icon platform-icon--${platform.id} ${platform.iconUrl ? "official-icon" : ""}" style="${platform.iconUrl ? `--fallback-color:${platform.color}` : `background:${platform.color}`}" title="${platform.name}">${platformIconMarkup(platform)}</span>` : ""}
+            ${showTitleIcon ? `<span class="title-icon platform-icon platform-icon--${platform.id} ${hasOfficialPlatformIcon(platform) ? "official-icon" : ""} ${hasSvgPlatformIcon(platform) ? "svg-data-icon" : ""}" style="${hasOfficialPlatformIcon(platform) ? `--fallback-color:${platform.color}` : ""}" title="${platform.name}">${platformIconMarkup(platform)}</span>` : ""}
             <strong>${item.title}</strong>
           </div>
         </div>
@@ -837,8 +900,7 @@ function bindBoardCard(card) {
   card.addEventListener("pointerleave", () => {
     scheduleHoverClear(card);
   });
-  card.addEventListener("click", () => openDetail(card.dataset.id));
-  card.addEventListener("dblclick", () => {
+  card.addEventListener("click", () => {
     const item = presets.find(preset => preset.id === card.dataset.id);
     if (item) copyText(formatSize(item));
   });
@@ -966,6 +1028,10 @@ function closestImage(targetRatio) {
 async function handleImageDrop(dataTransfer) {
   if (!dataTransfer) return;
   const files = await droppedFiles(dataTransfer);
+  await handleImageFiles(files);
+}
+
+async function handleImageFiles(files) {
   const imageFiles = files.filter(file => file.type.startsWith("image/"));
   if (!imageFiles.length) {
     showToast(ui("noImages"));

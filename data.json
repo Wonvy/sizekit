@@ -13,7 +13,8 @@
       "short": "微",
       "color": "#07C160",
       "category": "国内新媒体",
-      "iconUrl": "https://mp.weixin.qq.com/favicon.ico"
+      "iconUrl": "https://mp.weixin.qq.com/favicon.ico",
+      "websiteUrl": "https://mp.weixin.qq.com/"
     },
     {
       "id": "xiaohongshu",
@@ -21,7 +22,8 @@
       "short": "红",
       "color": "#FF2442",
       "category": "国内新媒体",
-      "iconUrl": "https://www.xiaohongshu.com/favicon.ico"
+      "iconUrl": "https://www.xiaohongshu.com/favicon.ico",
+      "websiteUrl": "https://www.xiaohongshu.com/"
     },
     {
       "id": "channels",
@@ -29,7 +31,8 @@
       "short": "视",
       "color": "#2FB344",
       "category": "国内新媒体",
-      "iconUrl": "https://weixin.qq.com/favicon.ico"
+      "iconUrl": "https://channels.weixin.qq.com/favicon.ico",
+      "websiteUrl": "https://channels.weixin.qq.com/"
     },
     {
       "id": "shortvideo",
@@ -37,7 +40,8 @@
       "short": "短",
       "color": "#111111",
       "category": "短视频",
-      "iconUrl": "https://www.douyin.com/favicon.ico"
+      "iconUrl": "https://www.douyin.com/favicon.ico",
+      "websiteUrl": "https://www.douyin.com/"
     },
     {
       "id": "youtube",
@@ -45,7 +49,8 @@
       "short": "YT",
       "color": "#FF0033",
       "category": "海外平台",
-      "iconUrl": "https://www.youtube.com/favicon.ico"
+      "iconUrl": "https://www.youtube.com/favicon.ico",
+      "websiteUrl": "https://www.youtube.com/"
     },
     {
       "id": "instagram",
@@ -53,7 +58,8 @@
       "short": "IG",
       "color": "#D62976",
       "category": "海外平台",
-      "iconUrl": "https://www.instagram.com/favicon.ico"
+      "iconUrl": "https://www.instagram.com/favicon.ico",
+      "websiteUrl": "https://www.instagram.com/"
     },
     {
       "id": "tiktok",
@@ -61,7 +67,8 @@
       "short": "TK",
       "color": "#010101",
       "category": "海外平台",
-      "iconUrl": "https://www.tiktok.com/favicon.ico"
+      "iconUrl": "https://www.tiktok.com/favicon.ico",
+      "websiteUrl": "https://www.tiktok.com/"
     },
     {
       "id": "x",
@@ -69,7 +76,8 @@
       "short": "X",
       "color": "#111111",
       "category": "海外平台",
-      "iconUrl": "https://x.com/favicon.ico"
+      "iconUrl": "https://x.com/favicon.ico",
+      "websiteUrl": "https://x.com/"
     },
     {
       "id": "facebook",
@@ -77,7 +85,8 @@
       "short": "f",
       "color": "#1877F2",
       "category": "海外平台",
-      "iconUrl": "https://www.facebook.com/favicon.ico"
+      "iconUrl": "https://www.facebook.com/favicon.ico",
+      "websiteUrl": "https://www.facebook.com/"
     },
     {
       "id": "linkedin",
@@ -85,7 +94,8 @@
       "short": "in",
       "color": "#0A66C2",
       "category": "海外平台",
-      "iconUrl": "https://www.linkedin.com/favicon.ico"
+      "iconUrl": "https://www.linkedin.com/favicon.ico",
+      "websiteUrl": "https://www.linkedin.com/"
     },
     {
       "id": "pinterest",
@@ -93,7 +103,8 @@
       "short": "P",
       "color": "#E60023",
       "category": "海外平台",
-      "iconUrl": "https://www.pinterest.com/favicon.ico"
+      "iconUrl": "https://www.pinterest.com/favicon.ico",
+      "websiteUrl": "https://www.pinterest.com/"
     },
     {
       "id": "threads",
@@ -101,7 +112,8 @@
       "short": "Th",
       "color": "#111111",
       "category": "海外平台",
-      "iconUrl": "https://www.threads.net/favicon.ico"
+      "iconUrl": "https://www.threads.net/favicon.ico",
+      "websiteUrl": "https://www.threads.net/"
     },
     {
       "id": "snapchat",
@@ -109,7 +121,8 @@
       "short": "SC",
       "color": "#FFFC00",
       "category": "海外平台",
-      "iconUrl": "https://www.snapchat.com/favicon.ico"
+      "iconUrl": "https://www.snapchat.com/favicon.ico",
+      "websiteUrl": "https://www.snapchat.com/"
     },
     {
       "id": "google-business",
@@ -117,7 +130,8 @@
       "short": "G",
       "color": "#4285F4",
       "category": "海外平台",
-      "iconUrl": "https://www.google.com/favicon.ico"
+      "iconUrl": "https://www.google.com/favicon.ico",
+      "websiteUrl": "https://www.google.com/business/"
     },
     {
       "id": "behance",
@@ -125,7 +139,8 @@
       "short": "Be",
       "color": "#1769FF",
       "category": "设计平台",
-      "iconUrl": "https://www.behance.net/favicon.ico"
+      "iconUrl": "https://www.behance.net/favicon.ico",
+      "websiteUrl": "https://www.behance.net/"
     },
     {
       "id": "dribbble",
@@ -133,7 +148,8 @@
       "short": "Db",
       "color": "#EA4C89",
       "category": "设计平台",
-      "iconUrl": "https://dribbble.com/favicon.ico"
+      "iconUrl": "https://dribbble.com/favicon.ico",
+      "websiteUrl": "https://dribbble.com/"
     },
     {
       "id": "bilibili",
@@ -141,7 +157,8 @@
       "short": "B",
       "color": "#00A1D6",
       "category": "国内新媒体",
-      "iconUrl": "https://www.bilibili.com/favicon.ico"
+      "iconUrl": "https://www.bilibili.com/favicon.ico",
+      "websiteUrl": "https://www.bilibili.com/"
     },
     {
       "id": "weibo",
@@ -149,7 +166,8 @@
       "short": "微",
       "color": "#E6162D",
       "category": "国内新媒体",
-      "iconUrl": "https://weibo.com/favicon.ico"
+      "iconUrl": "https://weibo.com/favicon.ico",
+      "websiteUrl": "https://weibo.com/"
     },
     {
       "id": "print",

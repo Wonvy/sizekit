@@ -20,7 +20,7 @@
   --font-number: Bahnschrift, "DIN Alternate", "Arial Narrow", var(--font-main);
   font-family: var(--font-main);
   font-variant-numeric: tabular-nums;
-  font-size: 12px;
+  font-size: 11px;
 }
 
 :root[data-theme="dark"] {
@@ -45,6 +45,9 @@
 }
 html[data-loading="true"] .app {
   opacity: 0;
+}
+html[data-loading="true"] .artboard-card {
+  animation: none;
 }
 html, body {
   width: 100%;
@@ -160,6 +163,10 @@ input {
   transform: scale(var(--edge-scale, 1));
   box-shadow: none;
 }
+.image-file-input {
+  display: none;
+}
+.image-action,
 .theme-action,
 .language-action {
   display: grid;
@@ -173,18 +180,19 @@ input {
   line-height: 1;
   transition: background .16s var(--ease), border-color .16s var(--ease), color .16s var(--ease);
 }
-.theme-action {
-  width: 34px;
-}
+.image-action,
+.theme-action,
 .language-action {
   width: 34px;
   padding: 0;
 }
+.image-action svg,
 .language-action svg {
   width: 18px;
   height: 18px;
   fill: currentColor;
 }
+.image-action:hover,
 .theme-action:hover,
 .language-action:hover {
   color: var(--text);
@@ -246,6 +254,9 @@ input {
 .platform-icon.official-icon {
   color: var(--text);
   background: color-mix(in srgb, var(--panel) 86%, transparent);
+}
+.platform-icon.official-icon.svg-data-icon {
+  background: transparent;
 }
 .platform-icon.official-icon:empty,
 .platform-icon.official-icon.icon-fallback {
@@ -317,7 +328,7 @@ input {
 .workspace-topbar {
   position: sticky;
   top: 0;
-  z-index: 80;
+  z-index: 220;
   display: grid;
   align-items: center;
   justify-content: center;
@@ -416,7 +427,7 @@ input {
   justify-content: flex-end;
   gap: 8px;
   flex: 0 0 auto;
-  width: 78px;
+  width: 116px;
   height: var(--control-h);
   white-space: nowrap;
   flex-wrap: nowrap;
@@ -595,7 +606,7 @@ h1 {
 .toolbar {
   position: sticky;
   top: var(--sticky-topbar-h);
-  z-index: 70;
+  z-index: 210;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -604,7 +615,7 @@ h1 {
   width: 100%;
   max-width: 100%;
   min-width: 0;
-  padding: 6px 124px 6px 32px;
+  padding: 6px 164px 6px 32px;
   background: var(--bg);
 }
 .toolbar .header-actions {
@@ -929,6 +940,7 @@ h1 {
   }
 }
 ::view-transition-group(*) {
+  z-index: 1;
   animation-duration: .42s;
   animation-timing-function: cubic-bezier(.22, .61, .36, 1);
 }
@@ -973,6 +985,15 @@ h1 {
 .title-icon svg {
   width: 14px;
   height: 14px;
+}
+.title-icon,
+.title-icon.official-icon,
+.title-icon.official-icon.icon-fallback {
+  color: var(--text);
+  background: transparent;
+}
+.title-icon img {
+  border-radius: 0;
 }
 .artboard {
   --board-w: 140px;
@@ -1318,8 +1339,12 @@ h1 {
     width: 100%;
     transition: height .28s var(--ease);
   }
+  .platform-hover-title {
+    display: none;
+  }
   .header-main { top: 18px; right: 18px; }
-  .header-actions { width: 72px; height: var(--control-h); gap: 6px; justify-content: flex-end; }
+  .header-actions { width: 108px; height: var(--control-h); gap: 6px; justify-content: flex-end; }
+  .image-action,
   .theme-action,
   .language-action {
     width: 32px;
@@ -1345,7 +1370,7 @@ h1 {
     transform: none;
   }
   .platform-select {
-    width: calc(100% - 82px);
+    width: calc(100% - 118px);
     transition: width .28s var(--ease);
   }
   .platform-select-trigger { width: 100%; }
@@ -1386,7 +1411,8 @@ h1 {
   }
   .image-toggle,
   .sort-menu summary {
-    width: 28px;
+    width: 34px;
+    height: var(--control-h);
     padding: 0;
     border-color: transparent;
     background: transparent;
@@ -1421,8 +1447,8 @@ h1 {
   .control-icon,
   .toggle-icon svg,
   .control-icon svg {
-    width: 21px;
-    height: 21px;
+    width: 24px;
+    height: 24px;
   }
   .toggle-icon,
   .control-icon {
@@ -1431,7 +1457,7 @@ h1 {
   .image-toggle input:checked + .toggle-icon {
     color: var(--text);
     border-radius: 6px;
-    background: color-mix(in srgb, var(--text) 14%, transparent);
+    background: transparent;
     box-shadow: none;
   }
   .sort-menu summary::after {
@@ -1462,7 +1488,7 @@ h1 {
   body.is-mobile-compact-top .workspace-topbar {
     min-height: var(--compact-top-h);
     padding: 6px 10px 6px 154px;
-    z-index: 92;
+    z-index: 220;
     background: color-mix(in srgb, var(--bg) 96%, transparent);
   }
   body.is-mobile-compact-top .header-platforms {
@@ -1473,7 +1499,7 @@ h1 {
   }
   body.is-mobile-compact-top .toolbar {
     top: 0;
-    z-index: 96;
+    z-index: 230;
     height: var(--compact-top-h);
     max-height: var(--compact-top-h);
     min-height: var(--compact-top-h);
@@ -1513,8 +1539,13 @@ h1 {
     width: 100%;
   }
   .artboard-stage {
-    min-height: 150px;
+    height: 170px;
+    min-height: 170px;
     align-items: end;
+  }
+  .artboard-card:hover .board-tooltip {
+    opacity: 0;
+    transform: translate(-50%, 0);
   }
   .board-info strong { font-size: 13px; }
   .detail-layout { grid-template-columns: 1fr; }
