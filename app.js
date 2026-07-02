@@ -3,9 +3,27 @@ let presets = [];
 let printPlatformIds = new Set();
 
 async function loadSizekitData() {
-  const response = await fetch("data.json", { cache: "no-store" });
-  if (!response.ok) throw new Error(`Failed to load data.json: ${response.status}`);
-  const data = await response.json();
+  if (location.protocol === "file:" && window.SIZEKIT_DATA) {
+    applySizekitData(window.SIZEKIT_DATA);
+    return;
+  }
+
+  let data = window.SIZEKIT_DATA;
+  try {
+    const response = await fetch("data.json", { cache: "no-store" });
+    if (response.ok) {
+      data = await response.json();
+    } else if (!data) {
+      throw new Error(`Failed to load data.json: ${response.status}`);
+    }
+  } catch (error) {
+    if (!data) throw error;
+  }
+
+  applySizekitData(data);
+}
+
+function applySizekitData(data) {
   platforms = Array.isArray(data.platforms) ? data.platforms : [];
   presets = Array.isArray(data.presets) ? data.presets : [];
   printPlatformIds = new Set(Array.isArray(data.printPlatformIds) ? data.printPlatformIds : []);
