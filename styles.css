@@ -160,7 +160,7 @@ input {
   transition: background .16s var(--ease), border-color .16s var(--ease), transform .16s cubic-bezier(.2,.9,.2,1), opacity .16s var(--ease);
 }
 .platform-button:hover {
-  background: var(--panel-soft);
+  background: transparent;
   border-color: transparent;
   transform: scale(var(--edge-scale, 1));
   box-shadow: none;
@@ -213,7 +213,7 @@ input {
   box-shadow: none;
 }
 .platform-button.is-active::before {
-  content: "";
+  content: none;
   position: absolute;
   inset: 4px;
   border-radius: 14px;
@@ -260,7 +260,7 @@ input {
 }
 .platform-icon.official-icon {
   color: var(--text);
-  background: color-mix(in srgb, var(--panel) 86%, transparent);
+  background: transparent;
 }
 .platform-icon.official-icon.svg-data-icon {
   background: transparent;
@@ -1602,4 +1602,3 @@ h1 {
   .dpi-grid, .specs { grid-template-columns: 1fr; }
   .toast { left: 18px; right: 18px; text-align: center; }
 }
-
