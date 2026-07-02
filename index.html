@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="SizeKit 是一个面向设计师的尺寸画板工具，用平台图标快速查看新媒体和印刷物料尺寸。" />
+  <title>SizeKit - 设计尺寸画板</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <main class="app" aria-label="SizeKit 设计尺寸画板">
+    <section class="workspace" aria-label="尺寸画布">
+      <header class="workspace-topbar">
+        <div class="header-main">
+          <div class="header-actions">
+            <button class="theme-action" id="themeToggle" type="button" aria-label="切换背景">◐</button>
+          </div>
+        </div>
+        <div class="header-marquee" aria-label="选择平台或物料">
+          <nav class="platform-nav" id="platformNav" aria-label="选择平台或物料"></nav>
+          <div class="platform-hover-title" id="platformHoverTitle" aria-hidden="true"></div>
+        </div>
+      </header>
+
+      <section class="toolbar" aria-label="搜索和尺寸过滤器">
+        <label class="search-box" aria-label="搜索尺寸">
+          <span>⌕</span>
+          <input id="searchInput" type="search" autocomplete="off" placeholder="搜索尺寸" />
+        </label>
+        <div class="filter-strip" id="filterStrip" aria-label="尺寸过滤器"></div>
+      </section>
+
+      <section class="canvas" id="canvas" aria-live="polite">
+        <div class="artboard-grid" id="artboardGrid"></div>
+      </section>
+    </section>
+  </main>
+
+  <dialog class="detail-dialog" id="detailDialog">
+    <article class="detail-card">
+      <button class="close-button" id="closeDialog" type="button" aria-label="关闭">×</button>
+      <div class="detail-head">
+        <div class="detail-logo" id="detailLogo">S</div>
+        <div>
+          <p id="detailPlatform">SizeKit</p>
+          <h2 id="detailTitle">尺寸详情</h2>
+          <span id="detailTags"></span>
+        </div>
+      </div>
+
+      <div class="detail-layout">
+        <div class="detail-preview-wrap">
+          <div class="detail-preview" id="detailPreview"><span id="detailRatioText">1:1</span></div>
+        </div>
+        <dl class="specs">
+          <div><dt>尺寸</dt><dd id="detailSize"></dd></div>
+          <div><dt>比例</dt><dd id="detailRatio"></dd></div>
+          <div><dt>单位</dt><dd id="detailUnit"></dd></div>
+          <div><dt>类型</dt><dd id="detailCategory"></dd></div>
+          <div><dt>DPI</dt><dd id="detailDpi"></dd></div>
+          <div><dt>安全区/出血</dt><dd id="detailBleed"></dd></div>
+        </dl>
+      </div>
+
+      <p class="note" id="detailNote"></p>
+
+      <section class="dpi-panel" id="dpiPanel" hidden>
+        <div class="dpi-title">
+          <strong>DPI 像素换算</strong>
+          <span>按成品尺寸估算，印刷以前以印厂文件为准。</span>
+        </div>
+        <div class="dpi-grid" id="dpiGrid"></div>
+      </section>
+
+      <div class="dialog-actions">
+        <button class="primary-button" id="copySizeButton" type="button">复制尺寸</button>
+        <button class="secondary-button" id="copyRatioButton" type="button">复制比例</button>
+      </div>
+    </article>
+  </dialog>
+
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+  <script src="app.js"></script>
+</body>
+</html>

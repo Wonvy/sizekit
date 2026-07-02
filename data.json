@@ -1,0 +1,1317 @@
+{
+  "platforms": [
+    {
+      "id": "all",
+      "name": "全部",
+      "short": "全",
+      "color": "#171717",
+      "category": "全部"
+    },
+    {
+      "id": "wechat",
+      "name": "微信公众号",
+      "short": "微",
+      "color": "#07C160",
+      "category": "国内新媒体",
+      "iconUrl": "https://mp.weixin.qq.com/favicon.ico"
+    },
+    {
+      "id": "xiaohongshu",
+      "name": "小红书",
+      "short": "红",
+      "color": "#FF2442",
+      "category": "国内新媒体",
+      "iconUrl": "https://www.xiaohongshu.com/favicon.ico"
+    },
+    {
+      "id": "channels",
+      "name": "微信视频号",
+      "short": "视",
+      "color": "#2FB344",
+      "category": "国内新媒体",
+      "iconUrl": "https://weixin.qq.com/favicon.ico"
+    },
+    {
+      "id": "shortvideo",
+      "name": "短视频通用",
+      "short": "短",
+      "color": "#111111",
+      "category": "短视频",
+      "iconUrl": "https://www.douyin.com/favicon.ico"
+    },
+    {
+      "id": "youtube",
+      "name": "YouTube",
+      "short": "YT",
+      "color": "#FF0033",
+      "category": "海外平台",
+      "iconUrl": "https://www.youtube.com/favicon.ico"
+    },
+    {
+      "id": "instagram",
+      "name": "Instagram",
+      "short": "IG",
+      "color": "#D62976",
+      "category": "海外平台",
+      "iconUrl": "https://www.instagram.com/favicon.ico"
+    },
+    {
+      "id": "tiktok",
+      "name": "TikTok",
+      "short": "TK",
+      "color": "#010101",
+      "category": "海外平台",
+      "iconUrl": "https://www.tiktok.com/favicon.ico"
+    },
+    {
+      "id": "x",
+      "name": "X / Twitter",
+      "short": "X",
+      "color": "#111111",
+      "category": "海外平台",
+      "iconUrl": "https://x.com/favicon.ico"
+    },
+    {
+      "id": "facebook",
+      "name": "Facebook",
+      "short": "f",
+      "color": "#1877F2",
+      "category": "海外平台",
+      "iconUrl": "https://www.facebook.com/favicon.ico"
+    },
+    {
+      "id": "linkedin",
+      "name": "LinkedIn",
+      "short": "in",
+      "color": "#0A66C2",
+      "category": "海外平台",
+      "iconUrl": "https://www.linkedin.com/favicon.ico"
+    },
+    {
+      "id": "pinterest",
+      "name": "Pinterest",
+      "short": "P",
+      "color": "#E60023",
+      "category": "海外平台",
+      "iconUrl": "https://www.pinterest.com/favicon.ico"
+    },
+    {
+      "id": "print",
+      "name": "印刷物料",
+      "short": "印",
+      "color": "#6B7280",
+      "category": "平面印刷",
+      "iconUrl": "https://www.adobe.com/favicon.ico"
+    },
+    {
+      "id": "paper",
+      "name": "A 系列纸张",
+      "short": "A",
+      "color": "#64748B",
+      "category": "平面印刷",
+      "iconUrl": "https://www.iso.org/favicon.ico"
+    },
+    {
+      "id": "card",
+      "name": "名片",
+      "short": "名",
+      "color": "#8B5CF6",
+      "category": "平面印刷",
+      "iconUrl": "https://www.adobe.com/favicon.ico"
+    },
+    {
+      "id": "brochure",
+      "name": "画册",
+      "short": "册",
+      "color": "#0EA5E9",
+      "category": "平面印刷",
+      "iconUrl": "https://www.adobe.com/favicon.ico"
+    },
+    {
+      "id": "fold",
+      "name": "三折页",
+      "short": "折",
+      "color": "#F59E0B",
+      "category": "平面印刷",
+      "iconUrl": "https://www.adobe.com/favicon.ico"
+    },
+    {
+      "id": "poster",
+      "name": "海报",
+      "short": "海",
+      "color": "#EF4444",
+      "category": "平面印刷",
+      "iconUrl": "https://www.adobe.com/favicon.ico"
+    },
+    {
+      "id": "rollup",
+      "name": "易拉宝",
+      "short": "展",
+      "color": "#14B8A6",
+      "category": "平面印刷",
+      "iconUrl": "https://www.adobe.com/favicon.ico"
+    }
+  ],
+  "printPlatformIds": [
+    "paper",
+    "card",
+    "brochure",
+    "fold",
+    "poster",
+    "rollup"
+  ],
+  "presets": [
+    {
+      "id": "wechat-avatar",
+      "platformId": "wechat",
+      "title": "头像",
+      "width": 240,
+      "height": 240,
+      "unit": "px",
+      "ratio": "1:1",
+      "bleed": "圆形裁切，主体居中",
+      "note": "公众号头像会以圆形展示，图标和文字不要贴边。",
+      "tags": [
+        "头像",
+        "方图"
+      ],
+      "dpi": null
+    },
+    {
+      "id": "wechat-main-cover",
+      "platformId": "wechat",
+      "title": "头条封面",
+      "width": 900,
+      "height": 383,
+      "unit": "px",
+      "ratio": "约 2.35:1",
+      "bleed": "重要标题放中间，避免边缘裁切",
+      "note": "适合公众号头条文章封面。不同入口可能出现裁切，核心内容建议放在画面中心。",
+      "tags": [
+        "封面",
+        "横版"
+      ],
+      "dpi": null
+    },
+    {
+      "id": "wechat-second-cover",
+      "platformId": "wechat",
+      "title": "次条小图",
+      "width": 200,
+      "height": 200,
+      "unit": "px",
+      "ratio": "1:1",
+      "bleed": "小图展示，文字尽量少",
+      "note": "用于公众号次条或列表缩略图。小尺寸展示时，应使用清晰主体。",
+      "tags": [
+        "缩略图",
+        "方图"
+      ],
+      "dpi": null
+    },
+    {
+      "id": "wechat-guide",
+      "platformId": "wechat",
+      "title": "内容引导图",
+      "width": 900,
+      "height": 500,
+      "unit": "px",
+      "ratio": "9:5",
+      "bleed": "正文中展示，左右留白更稳",
+      "note": "适合文末关注、课程介绍、活动引导、二维码说明等内容。",
+      "tags": [
+        "正文",
+        "引导"
+      ],
+      "dpi": null
+    },
+    {
+      "id": "wechat-qr",
+      "platformId": "wechat",
+      "title": "二维码名片",
+      "width": 600,
+      "height": 600,
+      "unit": "px",
+      "ratio": "1:1",
+      "bleed": "二维码周围保留足够留白",
+      "note": "二维码不要被压缩过度，周围留白能提升扫码成功率。",
+      "tags": [
+        "二维码",
+        "名片"
+      ],
+      "dpi": null
+    },
+    {
+      "id": "xhs-avatar",
+      "platformId": "xiaohongshu",
+      "title": "头像",
+      "width": 400,
+      "height": 400,
+      "unit": "px",
+      "ratio": "1:1",
+      "bleed": "圆形裁切，主体居中",
+      "note": "头像建议保持简洁，避免过细文字。",
+      "tags": [
+        "头像",
+        "方图"
+      ],
+      "dpi": null
+    },
+    {
+      "id": "xhs-cover-v",
+      "platformId": "xiaohongshu",
+      "title": "竖版封面",
+      "width": 1242,
+      "height": 1660,
+      "unit": "px",
+      "ratio": "约 3:4",
+      "bleed": "核心文字居中，四周留边",
+      "note": "适合小红书笔记封面。标题需要大，主页缩略图中也要可读。",
+      "tags": [
+        "封面",
+        "竖版"
+      ],
+      "dpi": null
+    },
+    {
+      "id": "xhs-cover-h",
+      "platformId": "xiaohongshu",
+      "title": "横版封面",
+      "width": 800,
+      "height": 600,
+      "unit": "px",
+      "ratio": "4:3",
+      "bleed": "主体居中，避免边缘文字",
+      "note": "适合横向构图笔记，展示产品、场景或多元素排版。",
+      "tags": [
+        "封面",
+        "横版"
+      ],
+      "dpi": null
+    },
+    {
+      "id": "xhs-bg",
+      "platformId": "xiaohongshu",
+      "title": "主页背景图",
+      "width": 1000,
+      "height": 800,
+      "unit": "px",
+      "ratio": "5:4",
+      "bleed": "中间区域优先放重要内容",
+      "note": "主页背景在不同设备可能显示区域不同，不建议放密集文字。",
+      "tags": [
+        "背景",
+        "主页"
+      ],
+      "dpi": null
+    },
+    {
+      "id": "xhs-image-v",
+      "platformId": "xiaohongshu",
+      "title": "竖版配图",
+      "width": 900,
+      "height": 1200,
+      "unit": "px",
+      "ratio": "3:4",
+      "bleed": "顶部标题和底部注释留边",
+      "note": "适合教程、清单、概念科普类图文。",
+      "tags": [
+        "配图",
+        "竖版"
+      ],
+      "dpi": null
+    },
+    {
+      "id": "xhs-image-square",
+      "platformId": "xiaohongshu",
+      "title": "方图配图",
+      "width": 1080,
+      "height": 1080,
+      "unit": "px",
+      "ratio": "1:1",
+      "bleed": "方图安全，适合多平台复用",
+      "note": "适合商品图、教程步骤、对比图等多平台复用内容。",
+      "tags": [
+        "配图",
+        "方图"
+      ],
+      "dpi": null
+    },
+    {
+      "id": "xhs-image-h",
+      "platformId": "xiaohongshu",
+      "title": "横版配图",
+      "width": 1200,
+      "height": 900,
+      "unit": "px",
+      "ratio": "4:3",
+      "bleed": "左右留边，适合横向信息",
+      "note": "适合横向场景、桌面物品、作品展示。",
+      "tags": [
+        "配图",
+        "横版"
+      ],
+      "dpi": null
+    },
+    {
+      "id": "channels-cover-h",
+      "platformId": "channels",
+      "title": "横版封面",
+      "width": 1080,
+      "height": 608,
+      "unit": "px",
+      "ratio": "约 16:9",
+      "bleed": "标题和人物避开边缘",
+      "note": "适合视频号横屏视频封面。不同设备上可能有轻微裁切。",
+      "tags": [
+        "封面",
+        "横版"
+      ],
+      "dpi": null
+    },
+    {
+      "id": "channels-cover-v",
+      "platformId": "channels",
+      "title": "竖版封面",
+      "width": 1080,
+      "height": 1260,
+      "unit": "px",
+      "ratio": "6:7",
+      "bleed": "主体居中，顶部底部不要放小字",
+      "note": "适合视频号主页展示。竖版封面比 9:16 更接近卡片比例。",
+      "tags": [
+        "封面",
+        "竖版"
+      ],
+      "dpi": null
+    },
+    {
+      "id": "channels-live",
+      "platformId": "channels",
+      "title": "直播封面",
+      "width": 810,
+      "height": 1440,
+      "unit": "px",
+      "ratio": "9:16",
+      "bleed": "避开上下 UI 区域",
+      "note": "适合直播间竖版封面。",
+      "tags": [
+        "直播",
+        "竖版"
+      ],
+      "dpi": null
+    },
+    {
+      "id": "sv-vertical",
+      "platformId": "shortvideo",
+      "title": "竖屏视频/封面",
+      "width": 1080,
+      "height": 1920,
+      "unit": "px",
+      "ratio": "9:16",
+      "bleed": "顶部、底部和右侧预留 UI 安全区",
+      "note": "适合抖音、快手、TikTok、Reels、Stories 等竖屏内容。",
+      "tags": [
+        "竖屏",
+        "视频"
+      ],
+      "dpi": null
+    },
+    {
+      "id": "sv-horizontal",
+      "platformId": "shortvideo",
+      "title": "横屏视频/封面",
+      "width": 1920,
+      "height": 1080,
+      "unit": "px",
+      "ratio": "16:9",
+      "bleed": "标题放中间区域",
+      "note": "适合横版视频和横版封面。",
+      "tags": [
+        "横屏",
+        "视频"
+      ],
+      "dpi": null
+    },
+    {
+      "id": "sv-square",
+      "platformId": "shortvideo",
+      "title": "方形视频",
+      "width": 1080,
+      "height": 1080,
+      "unit": "px",
+      "ratio": "1:1",
+      "bleed": "方形构图，适合信息流",
+      "note": "适合多平台复用的短视频或动图内容。",
+      "tags": [
+        "方形",
+        "视频"
+      ],
+      "dpi": null
+    },
+    {
+      "id": "youtube-thumbnail",
+      "platformId": "youtube",
+      "title": "视频缩略图",
+      "width": 3840,
+      "height": 2160,
+      "unit": "px",
+      "ratio": "16:9",
+      "bleed": "核心内容居中，避免过细文字",
+      "note": "YouTube 缩略图推荐使用 16:9。",
+      "tags": [
+        "封面",
+        "横版"
+      ],
+      "dpi": null
+    },
+    {
+      "id": "youtube-thumbnail-light",
+      "platformId": "youtube",
+      "title": "轻量缩略图",
+      "width": 1280,
+      "height": 720,
+      "unit": "px",
+      "ratio": "16:9",
+      "bleed": "适合快速上传和预览",
+      "note": "常用视频封面尺寸。",
+      "tags": [
+        "封面",
+        "横版"
+      ],
+      "dpi": null
+    },
+    {
+      "id": "youtube-shorts",
+      "platformId": "youtube",
+      "title": "Shorts",
+      "width": 1080,
+      "height": 1920,
+      "unit": "px",
+      "ratio": "9:16",
+      "bleed": "上下保留 UI 安全区",
+      "note": "适合 YouTube Shorts 竖屏内容。",
+      "tags": [
+        "竖屏",
+        "视频"
+      ],
+      "dpi": null
+    },
+    {
+      "id": "ig-square",
+      "platformId": "instagram",
+      "title": "方图帖",
+      "width": 1080,
+      "height": 1080,
+      "unit": "px",
+      "ratio": "1:1",
+      "bleed": "方形安全，适合多平台复用",
+      "note": "适合 Instagram Feed 方图。",
+      "tags": [
+        "Feed",
+        "方图"
+      ],
+      "dpi": null
+    },
+    {
+      "id": "ig-portrait",
+      "platformId": "instagram",
+      "title": "竖版帖",
+      "width": 1080,
+      "height": 1350,
+      "unit": "px",
+      "ratio": "4:5",
+      "bleed": "主体居中，适合信息流竖图",
+      "note": "Instagram Feed 竖版常用比例。",
+      "tags": [
+        "Feed",
+        "竖图"
+      ],
+      "dpi": null
+    },
+    {
+      "id": "ig-landscape",
+      "platformId": "instagram",
+      "title": "横版帖",
+      "width": 1080,
+      "height": 566,
+      "unit": "px",
+      "ratio": "约 1.91:1",
+      "bleed": "横向内容居中",
+      "note": "适合横版 Feed 图片。",
+      "tags": [
+        "Feed",
+        "横图"
+      ],
+      "dpi": null
+    },
+    {
+      "id": "ig-story",
+      "platformId": "instagram",
+      "title": "Story / Reels",
+      "width": 1080,
+      "height": 1920,
+      "unit": "px",
+      "ratio": "9:16",
+      "bleed": "上下保留 UI 安全区",
+      "note": "适合 Instagram Story 和 Reels。",
+      "tags": [
+        "Story",
+        "Reels"
+      ],
+      "dpi": null
+    },
+    {
+      "id": "tiktok-vertical",
+      "platformId": "tiktok",
+      "title": "竖屏视频",
+      "width": 1080,
+      "height": 1920,
+      "unit": "px",
+      "ratio": "9:16",
+      "bleed": "右侧和底部预留按钮安全区",
+      "note": "适合 TikTok 竖屏内容。",
+      "tags": [
+        "竖屏",
+        "视频"
+      ],
+      "dpi": null
+    },
+    {
+      "id": "tiktok-horizontal",
+      "platformId": "tiktok",
+      "title": "横屏视频",
+      "width": 1920,
+      "height": 1080,
+      "unit": "px",
+      "ratio": "16:9",
+      "bleed": "中间区域放标题和主体",
+      "note": "适合横版内容。",
+      "tags": [
+        "横屏",
+        "视频"
+      ],
+      "dpi": null
+    },
+    {
+      "id": "tiktok-square",
+      "platformId": "tiktok",
+      "title": "方形视频",
+      "width": 1080,
+      "height": 1080,
+      "unit": "px",
+      "ratio": "1:1",
+      "bleed": "方形构图，便于复用",
+      "note": "适合部分广告或信息流内容。",
+      "tags": [
+        "方形",
+        "视频"
+      ],
+      "dpi": null
+    },
+    {
+      "id": "x-profile",
+      "platformId": "x",
+      "title": "头像",
+      "width": 400,
+      "height": 400,
+      "unit": "px",
+      "ratio": "1:1",
+      "bleed": "圆形裁切，主体居中",
+      "note": "X 官方帮助建议头像使用 400×400 px。",
+      "tags": [
+        "头像",
+        "方图"
+      ],
+      "dpi": null
+    },
+    {
+      "id": "x-header",
+      "platformId": "x",
+      "title": "主页头图",
+      "width": 1500,
+      "height": 500,
+      "unit": "px",
+      "ratio": "3:1",
+      "bleed": "左右和底部留出裁切安全区",
+      "note": "X 官方帮助建议头图使用 1500×500 px。",
+      "tags": [
+        "头图",
+        "横版"
+      ],
+      "dpi": null
+    },
+    {
+      "id": "x-post-landscape",
+      "platformId": "x",
+      "title": "横图帖",
+      "width": 1600,
+      "height": 900,
+      "unit": "px",
+      "ratio": "16:9",
+      "bleed": "主体居中，适合链接预览和横图",
+      "note": "常用 X 横向图片发布比例。",
+      "tags": [
+        "帖子",
+        "横图"
+      ],
+      "dpi": null
+    },
+    {
+      "id": "x-post-square",
+      "platformId": "x",
+      "title": "方图帖",
+      "width": 1200,
+      "height": 1200,
+      "unit": "px",
+      "ratio": "1:1",
+      "bleed": "方图适合信息流多平台复用",
+      "note": "适合 X 单图或多图发布。",
+      "tags": [
+        "帖子",
+        "方图"
+      ],
+      "dpi": null
+    },
+    {
+      "id": "x-post-portrait",
+      "platformId": "x",
+      "title": "竖图帖",
+      "width": 1080,
+      "height": 1350,
+      "unit": "px",
+      "ratio": "4:5",
+      "bleed": "顶部和底部保留关键信息",
+      "note": "适合移动端信息流竖图。",
+      "tags": [
+        "帖子",
+        "竖图"
+      ],
+      "dpi": null
+    },
+    {
+      "id": "facebook-profile",
+      "platformId": "facebook",
+      "title": "头像",
+      "width": 400,
+      "height": 400,
+      "unit": "px",
+      "ratio": "1:1",
+      "bleed": "圆形裁切，主体居中",
+      "note": "适合 Facebook 主页或个人资料头像。",
+      "tags": [
+        "头像",
+        "方图"
+      ],
+      "dpi": null
+    },
+    {
+      "id": "facebook-cover",
+      "platformId": "facebook",
+      "title": "主页封面",
+      "width": 1640,
+      "height": 624,
+      "unit": "px",
+      "ratio": "约 2.63:1",
+      "bleed": "移动端和桌面裁切不同，核心内容居中",
+      "note": "适合 Facebook Page 头图封面。",
+      "tags": [
+        "封面",
+        "横版"
+      ],
+      "dpi": null
+    },
+    {
+      "id": "facebook-post-square",
+      "platformId": "facebook",
+      "title": "方图帖",
+      "width": 1200,
+      "height": 1200,
+      "unit": "px",
+      "ratio": "1:1",
+      "bleed": "方图适合信息流展示",
+      "note": "适合 Facebook Feed 图片。",
+      "tags": [
+        "帖子",
+        "方图"
+      ],
+      "dpi": null
+    },
+    {
+      "id": "facebook-post-landscape",
+      "platformId": "facebook",
+      "title": "横图帖",
+      "width": 1200,
+      "height": 630,
+      "unit": "px",
+      "ratio": "约 1.91:1",
+      "bleed": "标题和主体居中",
+      "note": "常用于分享图、链接预览和横版图片。",
+      "tags": [
+        "帖子",
+        "横图"
+      ],
+      "dpi": null
+    },
+    {
+      "id": "facebook-story",
+      "platformId": "facebook",
+      "title": "Story / Reels",
+      "width": 1080,
+      "height": 1920,
+      "unit": "px",
+      "ratio": "9:16",
+      "bleed": "上下预留 UI 安全区",
+      "note": "适合 Facebook Story 和 Reels。",
+      "tags": [
+        "Story",
+        "Reels"
+      ],
+      "dpi": null
+    },
+    {
+      "id": "linkedin-logo",
+      "platformId": "linkedin",
+      "title": "公司 Logo",
+      "width": 400,
+      "height": 400,
+      "unit": "px",
+      "ratio": "1:1",
+      "bleed": "主体居中，边缘留白",
+      "note": "适合 LinkedIn 公司页头像。",
+      "tags": [
+        "Logo",
+        "方图"
+      ],
+      "dpi": null
+    },
+    {
+      "id": "linkedin-cover",
+      "platformId": "linkedin",
+      "title": "公司封面",
+      "width": 1128,
+      "height": 191,
+      "unit": "px",
+      "ratio": "约 5.91:1",
+      "bleed": "横向极宽，文字不要贴边",
+      "note": "适合 LinkedIn Company Page Cover。",
+      "tags": [
+        "封面",
+        "横版"
+      ],
+      "dpi": null
+    },
+    {
+      "id": "linkedin-post-link",
+      "platformId": "linkedin",
+      "title": "链接预览图",
+      "width": 1200,
+      "height": 627,
+      "unit": "px",
+      "ratio": "约 1.91:1",
+      "bleed": "主体居中，适合标题图",
+      "note": "常用 LinkedIn 链接分享图。",
+      "tags": [
+        "帖子",
+        "链接"
+      ],
+      "dpi": null
+    },
+    {
+      "id": "linkedin-post-square",
+      "platformId": "linkedin",
+      "title": "方图帖",
+      "width": 1200,
+      "height": 1200,
+      "unit": "px",
+      "ratio": "1:1",
+      "bleed": "方图适合信息流稳定展示",
+      "note": "适合 LinkedIn Feed 图片。",
+      "tags": [
+        "帖子",
+        "方图"
+      ],
+      "dpi": null
+    },
+    {
+      "id": "linkedin-ad-vertical",
+      "platformId": "linkedin",
+      "title": "竖图广告",
+      "width": 720,
+      "height": 900,
+      "unit": "px",
+      "ratio": "4:5",
+      "bleed": "移动端优先，避免边缘文字",
+      "note": "LinkedIn 单图广告常用竖版比例。",
+      "tags": [
+        "广告",
+        "竖图"
+      ],
+      "dpi": null
+    },
+    {
+      "id": "pinterest-pin",
+      "platformId": "pinterest",
+      "title": "标准 Pin",
+      "width": 1000,
+      "height": 1500,
+      "unit": "px",
+      "ratio": "2:3",
+      "bleed": "标题和主体放在上方安全区",
+      "note": "Pinterest 推荐标准 Pin 使用 2:3 竖版比例。",
+      "tags": [
+        "Pin",
+        "竖图"
+      ],
+      "dpi": null
+    },
+    {
+      "id": "pinterest-square",
+      "platformId": "pinterest",
+      "title": "方形 Pin",
+      "width": 1000,
+      "height": 1000,
+      "unit": "px",
+      "ratio": "1:1",
+      "bleed": "方图适合多平台复用",
+      "note": "适合 Pinterest 方形素材。",
+      "tags": [
+        "Pin",
+        "方图"
+      ],
+      "dpi": null
+    },
+    {
+      "id": "pinterest-long",
+      "platformId": "pinterest",
+      "title": "长图 Pin",
+      "width": 1000,
+      "height": 2100,
+      "unit": "px",
+      "ratio": "约 1:2.1",
+      "bleed": "关键信息放在顶部三分之二",
+      "note": "长图在信息流中可能被折叠，避免底部放核心内容。",
+      "tags": [
+        "Pin",
+        "长图"
+      ],
+      "dpi": null
+    },
+    {
+      "id": "pinterest-story",
+      "platformId": "pinterest",
+      "title": "Idea Pin",
+      "width": 1080,
+      "height": 1920,
+      "unit": "px",
+      "ratio": "9:16",
+      "bleed": "上下留出 UI 安全区",
+      "note": "适合 Pinterest 竖屏内容。",
+      "tags": [
+        "Idea Pin",
+        "竖屏"
+      ],
+      "dpi": null
+    },
+    {
+      "id": "a0",
+      "platformId": "paper",
+      "title": "A0",
+      "width": 841,
+      "height": 1189,
+      "unit": "mm",
+      "ratio": "√2",
+      "bleed": "四周通常预留 3mm 出血",
+      "note": "适合大型海报、展板。",
+      "tags": [
+        "纸张",
+        "大尺寸"
+      ],
+      "dpi": 150
+    },
+    {
+      "id": "a1",
+      "platformId": "paper",
+      "title": "A1",
+      "width": 594,
+      "height": 841,
+      "unit": "mm",
+      "ratio": "√2",
+      "bleed": "四周通常预留 3mm 出血",
+      "note": "适合海报、展板。",
+      "tags": [
+        "纸张",
+        "海报"
+      ],
+      "dpi": 150
+    },
+    {
+      "id": "a2",
+      "platformId": "paper",
+      "title": "A2",
+      "width": 420,
+      "height": 594,
+      "unit": "mm",
+      "ratio": "√2",
+      "bleed": "四周通常预留 3mm 出血",
+      "note": "适合小型海报。",
+      "tags": [
+        "纸张",
+        "海报"
+      ],
+      "dpi": 300
+    },
+    {
+      "id": "a3",
+      "platformId": "paper",
+      "title": "A3",
+      "width": 297,
+      "height": 420,
+      "unit": "mm",
+      "ratio": "√2",
+      "bleed": "四周通常预留 3mm 出血",
+      "note": "适合海报、折页展开。",
+      "tags": [
+        "纸张",
+        "印刷"
+      ],
+      "dpi": 300
+    },
+    {
+      "id": "a4",
+      "platformId": "paper",
+      "title": "A4",
+      "width": 210,
+      "height": 297,
+      "unit": "mm",
+      "ratio": "√2",
+      "bleed": "四周通常预留 3mm 出血",
+      "note": "最常用的单页、画册和文件尺寸。",
+      "tags": [
+        "纸张",
+        "单页"
+      ],
+      "dpi": 300
+    },
+    {
+      "id": "a5",
+      "platformId": "paper",
+      "title": "A5",
+      "width": 148,
+      "height": 210,
+      "unit": "mm",
+      "ratio": "√2",
+      "bleed": "四周通常预留 3mm 出血",
+      "note": "适合小册子、手册。",
+      "tags": [
+        "纸张",
+        "小册子"
+      ],
+      "dpi": 300
+    },
+    {
+      "id": "a6",
+      "platformId": "paper",
+      "title": "A6",
+      "width": 105,
+      "height": 148,
+      "unit": "mm",
+      "ratio": "√2",
+      "bleed": "四周通常预留 3mm 出血",
+      "note": "适合明信片、小卡片。",
+      "tags": [
+        "纸张",
+        "卡片"
+      ],
+      "dpi": 300
+    },
+    {
+      "id": "card-standard",
+      "platformId": "card",
+      "title": "标准名片",
+      "width": 90,
+      "height": 54,
+      "unit": "mm",
+      "ratio": "5:3",
+      "bleed": "建议加 2-3mm 出血，文字离边 3mm 以上",
+      "note": "国内常用名片成品尺寸。",
+      "tags": [
+        "名片",
+        "成品"
+      ],
+      "dpi": 300
+    },
+    {
+      "id": "card-bleed",
+      "platformId": "card",
+      "title": "名片含出血",
+      "width": 93,
+      "height": 57,
+      "unit": "mm",
+      "ratio": "约 31:19",
+      "bleed": "按 90×54mm 成品四周加 1.5mm 出血估算",
+      "note": "具体出血以印厂模板为准。",
+      "tags": [
+        "名片",
+        "出血"
+      ],
+      "dpi": 300
+    },
+    {
+      "id": "card-eu",
+      "platformId": "card",
+      "title": "欧式名片",
+      "width": 85,
+      "height": 54,
+      "unit": "mm",
+      "ratio": "约 1.57:1",
+      "bleed": "建议加 2-3mm 出血",
+      "note": "偏国际化的名片比例。",
+      "tags": [
+        "名片",
+        "欧式"
+      ],
+      "dpi": 300
+    },
+    {
+      "id": "brochure-page",
+      "platformId": "brochure",
+      "title": "常规画册单页",
+      "width": 210,
+      "height": 285,
+      "unit": "mm",
+      "ratio": "14:19",
+      "bleed": "四周 3mm 出血，装订边留更多安全区",
+      "note": "常见商业画册单页尺寸。",
+      "tags": [
+        "画册",
+        "单页"
+      ],
+      "dpi": 300
+    },
+    {
+      "id": "brochure-spread",
+      "platformId": "brochure",
+      "title": "画册展开页",
+      "width": 420,
+      "height": 285,
+      "unit": "mm",
+      "ratio": "28:19",
+      "bleed": "中缝附近避免放小字",
+      "note": "常规画册跨页设计参考。",
+      "tags": [
+        "画册",
+        "跨页"
+      ],
+      "dpi": 300
+    },
+    {
+      "id": "brochure-square",
+      "platformId": "brochure",
+      "title": "方形画册",
+      "width": 210,
+      "height": 210,
+      "unit": "mm",
+      "ratio": "1:1",
+      "bleed": "四周 3mm 出血",
+      "note": "适合作品集、品牌画册、摄影画册。",
+      "tags": [
+        "画册",
+        "方形"
+      ],
+      "dpi": 300
+    },
+    {
+      "id": "fold-a4",
+      "platformId": "fold",
+      "title": "A4 三折页展开",
+      "width": 285,
+      "height": 210,
+      "unit": "mm",
+      "ratio": "19:14",
+      "bleed": "折线附近不要放小字",
+      "note": "折后约 95×210mm，适合宣传折页。",
+      "tags": [
+        "折页",
+        "A4"
+      ],
+      "dpi": 300
+    },
+    {
+      "id": "fold-a4-bleed",
+      "platformId": "fold",
+      "title": "A4 三折页含出血",
+      "width": 291,
+      "height": 216,
+      "unit": "mm",
+      "ratio": "约 97:72",
+      "bleed": "四周加 3mm 出血",
+      "note": "下印厂前请按刀模确认折线。",
+      "tags": [
+        "折页",
+        "出血"
+      ],
+      "dpi": 300
+    },
+    {
+      "id": "fold-a3",
+      "platformId": "fold",
+      "title": "A3 三折页展开",
+      "width": 420,
+      "height": 285,
+      "unit": "mm",
+      "ratio": "28:19",
+      "bleed": "折线附近不要放小字",
+      "note": "折后约 140×285mm。",
+      "tags": [
+        "折页",
+        "A3"
+      ],
+      "dpi": 300
+    },
+    {
+      "id": "poster-a3",
+      "platformId": "poster",
+      "title": "A3 海报",
+      "width": 297,
+      "height": 420,
+      "unit": "mm",
+      "ratio": "√2",
+      "bleed": "四周 3mm 出血",
+      "note": "适合店内、小型活动海报。",
+      "tags": [
+        "海报",
+        "A3"
+      ],
+      "dpi": 300
+    },
+    {
+      "id": "poster-a2",
+      "platformId": "poster",
+      "title": "A2 海报",
+      "width": 420,
+      "height": 594,
+      "unit": "mm",
+      "ratio": "√2",
+      "bleed": "四周 3mm 出血",
+      "note": "适合中型海报。",
+      "tags": [
+        "海报",
+        "A2"
+      ],
+      "dpi": 300
+    },
+    {
+      "id": "poster-a1",
+      "platformId": "poster",
+      "title": "A1 海报",
+      "width": 594,
+      "height": 841,
+      "unit": "mm",
+      "ratio": "√2",
+      "bleed": "大尺寸可使用 150dpi",
+      "note": "适合展板和大海报。",
+      "tags": [
+        "海报",
+        "A1"
+      ],
+      "dpi": 150
+    },
+    {
+      "id": "poster-a0",
+      "platformId": "poster",
+      "title": "A0 海报",
+      "width": 841,
+      "height": 1189,
+      "unit": "mm",
+      "ratio": "√2",
+      "bleed": "大尺寸可使用 150dpi",
+      "note": "适合大型海报和展板。",
+      "tags": [
+        "海报",
+        "A0"
+      ],
+      "dpi": 150
+    },
+    {
+      "id": "rollup-60-160",
+      "platformId": "rollup",
+      "title": "易拉宝 60×160",
+      "width": 60,
+      "height": 160,
+      "unit": "cm",
+      "ratio": "3:8",
+      "bleed": "底部可能被卷轴遮挡，建议底部留 10cm",
+      "note": "小型展示架，适合室内短期展示。",
+      "tags": [
+        "展架",
+        "小型"
+      ],
+      "dpi": 150
+    },
+    {
+      "id": "rollup-80-180",
+      "platformId": "rollup",
+      "title": "易拉宝 80×180",
+      "width": 80,
+      "height": 180,
+      "unit": "cm",
+      "ratio": "4:9",
+      "bleed": "底部可能被卷轴遮挡，建议底部留 10cm",
+      "note": "常见易拉宝尺寸。",
+      "tags": [
+        "展架",
+        "常用"
+      ],
+      "dpi": 150
+    },
+    {
+      "id": "rollup-80-200",
+      "platformId": "rollup",
+      "title": "易拉宝 80×200",
+      "width": 80,
+      "height": 200,
+      "unit": "cm",
+      "ratio": "2:5",
+      "bleed": "底部可能被卷轴遮挡，建议底部留 10cm",
+      "note": "最常见的加高易拉宝尺寸之一。",
+      "tags": [
+        "展架",
+        "加高"
+      ],
+      "dpi": 150
+    },
+    {
+      "id": "rollup-100-200",
+      "platformId": "rollup",
+      "title": "易拉宝 100×200",
+      "width": 100,
+      "height": 200,
+      "unit": "cm",
+      "ratio": "1:2",
+      "bleed": "底部可能被卷轴遮挡，建议底部留 10cm",
+      "note": "展会、门店常用大尺寸。",
+      "tags": [
+        "展架",
+        "大型"
+      ],
+      "dpi": 150
+    },
+    {
+      "id": "rollup-120-200",
+      "platformId": "rollup",
+      "title": "易拉宝 120×200",
+      "width": 120,
+      "height": 200,
+      "unit": "cm",
+      "ratio": "3:5",
+      "bleed": "底部可能被卷轴遮挡，建议底部留 10cm",
+      "note": "更宽的展示场景。",
+      "tags": [
+        "展架",
+        "超宽"
+      ],
+      "dpi": 150
+    }
+  ]
+}
