@@ -31,6 +31,7 @@
       "short": "视",
       "color": "#2FB344",
       "category": "国内新媒体",
+      "iconSvg": "<svg viewBox=\"0 0 24 24\" aria-hidden=\"true\"><rect x=\"3\" y=\"3\" width=\"18\" height=\"18\" rx=\"5\" fill=\"#2FB344\"/><path d=\"M9.3 7.5v9l7.2-4.5-7.2-4.5Z\" fill=\"#fff\"/><path d=\"M6.4 8.2a1.2 1.2 0 1 1 0 2.4 1.2 1.2 0 0 1 0-2.4Zm0 5.2a1.2 1.2 0 1 1 0 2.4 1.2 1.2 0 0 1 0-2.4Z\" fill=\"#fff\" opacity=\".9\"/></svg>",
       "iconUrl": "https://channels.weixin.qq.com/favicon.ico",
       "websiteUrl": "https://channels.weixin.qq.com/"
     },
