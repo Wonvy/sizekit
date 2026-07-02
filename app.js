@@ -162,6 +162,7 @@ let platformSelectCloseTimer = 0;
 let dragDepth = 0;
 let hasRenderedBoards = false;
 let imageRenderVersion = 0;
+let lastScrollY = window.scrollY;
 
 const pinyinInitials = {
   "全":"q","部":"b","国":"g","内":"n","短":"d","视":"s","频":"p","海":"h","外":"w","印":"y","刷":"s",
@@ -230,9 +231,11 @@ function bindEvents() {
     render();
   });
   window.addEventListener("resize", () => {
+    updateMobileTopMode();
     updatePlatformActiveState();
     syncPlatformCarousel({ immediate: true });
   });
+  window.addEventListener("scroll", updateMobileTopMode, { passive: true });
 
   els.themeToggle.addEventListener("click", () => {
     state.theme = state.theme === "dark" ? "light" : "dark";
@@ -331,6 +334,23 @@ function bindEvents() {
   els.platformNav.parentElement.addEventListener("pointermove", movePlatformDrag);
   els.platformNav.parentElement.addEventListener("pointerup", endPlatformDrag);
   els.platformNav.parentElement.addEventListener("pointercancel", endPlatformDrag);
+  updateMobileTopMode();
+}
+
+function updateMobileTopMode() {
+  const isMobile = window.matchMedia("(max-width: 760px)").matches;
+  const currentScrollY = window.scrollY;
+  const delta = currentScrollY - lastScrollY;
+
+  if (!isMobile || currentScrollY <= 8) {
+    document.body.classList.remove("is-mobile-compact-top");
+  } else if (delta > 6) {
+    document.body.classList.add("is-mobile-compact-top");
+  } else if (delta < -6) {
+    document.body.classList.remove("is-mobile-compact-top");
+  }
+
+  lastScrollY = currentScrollY;
 }
 
 function renderNav() {
@@ -381,8 +401,11 @@ function renderPlatformSelect() {
 }
 
 function platformSelectOptionMarkup(platform, extraClass = "") {
+  const iconStyle = platform.id === "all"
+    ? ""
+    : platform.iconUrl ? `--fallback-color:${platform.color}` : `background:${platform.color}`;
   return `
-    <span class="platform-select-icon platform-icon platform-icon--${platform.id} ${platform.iconUrl ? "official-icon" : ""} ${extraClass}" style="${platform.iconUrl ? `--fallback-color:${platform.color}` : `background:${platform.color}`}">${platformIconMarkup(platform)}</span>
+    <span class="platform-select-icon platform-icon platform-icon--${platform.id} ${platform.iconUrl ? "official-icon" : ""} ${extraClass}" style="${iconStyle}">${platformIconMarkup(platform)}</span>
     <span class="platform-select-name">${platform.name}</span>
   `;
 }
@@ -424,7 +447,7 @@ function platformIconMarkup(platform) {
 
 function platformIcon(id) {
   const icons = {
-    all: `<svg viewBox="0 0 24 24"><path d="M5 5h6v6H5zM13 5h6v6h-6zM5 13h6v6H5zM13 13h6v6h-6z"/></svg>`,
+    all: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><path d="M5 5h5.2v5.2H5zM13.8 5H19v5.2h-5.2zM5 13.8h5.2V19H5zM13.8 13.8H19V19h-5.2z"/></svg>`,
     wechat: `<svg viewBox="0 0 24 24"><path d="M10.2 5.2c-4 0-7.2 2.6-7.2 5.9 0 1.8 1 3.4 2.5 4.5l-.6 2.1 2.5-1.2c.8.3 1.8.5 2.8.5.3 0 .6 0 .9-.1-.3-.7-.5-1.4-.5-2.2 0-3.1 3-5.6 6.7-5.6h.5c-1-2.3-4-3.9-7.6-3.9Zm-2.5 4.5a.9.9 0 1 1 0-1.8.9.9 0 0 1 0 1.8Zm4.9 0a.9.9 0 1 1 0-1.8.9.9 0 0 1 0 1.8Z"/><path d="M17.3 10.7c-3 0-5.5 1.9-5.5 4.3s2.5 4.3 5.5 4.3c.7 0 1.5-.1 2.1-.4l1.9.9-.5-1.6c1.2-.8 1.9-1.9 1.9-3.2 0-2.4-2.4-4.3-5.4-4.3Zm-1.9 3.1a.7.7 0 1 1 0-1.4.7.7 0 0 1 0 1.4Zm3.8 0a.7.7 0 1 1 0-1.4.7.7 0 0 1 0 1.4Z"/></svg>`,
     xiaohongshu: `<svg viewBox="0 0 24 24"><path d="M5 6.4C5 5.1 6.1 4 7.4 4h9.2C17.9 4 19 5.1 19 6.4v11.2c0 1.3-1.1 2.4-2.4 2.4H7.4C6.1 20 5 18.9 5 17.6V6.4Z"/><path fill="#FF2442" d="M7.3 6.7h9.4v10.6H7.3z"/><path d="M9 8.3h6v1.5H9zM9 11.2h6v1.5H9zM9 14.1h4.2v1.5H9z"/></svg>`,
     channels: `<svg viewBox="0 0 24 24"><path d="M4 12c0-4 3.4-7.2 7.6-7.2 4 0 7.2 2.8 7.5 6.5l2.2 1.4-2.2 1.4c-.5 3.4-3.7 6.1-7.5 6.1C7.4 20.2 4 16 4 12Z"/><path fill="#2FB344" d="m10.1 8.6 5.6 3.4-5.6 3.4V8.6Z"/></svg>`,

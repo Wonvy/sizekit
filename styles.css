@@ -481,6 +481,10 @@ h1 {
   color: #fff;
   overflow: hidden;
 }
+.platform-select-icon.platform-icon--all {
+  color: var(--text);
+  background: transparent;
+}
 .platform-select-icon img,
 .platform-select-icon svg {
   width: 14px;
@@ -1270,6 +1274,7 @@ h1 {
   :root {
     --sticky-topbar-h: 84px;
     --sticky-toolbar-h: 94px;
+    --compact-top-h: 58px;
   }
   body { overflow: auto; }
   .app { grid-template-columns: 1fr; height: auto; min-height: 100vh; overflow: visible; }
@@ -1279,6 +1284,7 @@ h1 {
     min-height: 100vh;
     overflow: visible;
     padding-top: calc(var(--sticky-topbar-h) + var(--sticky-toolbar-h));
+    transition: padding-top .28s var(--ease);
   }
   .workspace-topbar {
     position: fixed;
@@ -1287,12 +1293,14 @@ h1 {
     right: 0;
     min-height: 84px;
     padding: 14px 16px 6px;
+    transition: min-height .28s var(--ease), padding .28s var(--ease), background .28s var(--ease), backdrop-filter .28s var(--ease);
   }
   .header-platforms {
     grid-template-columns: minmax(0, 1fr);
     column-gap: 0;
     width: 100%;
     height: 48px;
+    transition: padding-left .28s var(--ease), height .28s var(--ease);
   }
   .platform-fixed {
     display: none;
@@ -1308,6 +1316,7 @@ h1 {
   .header-marquee {
     --icon-step: 48px;
     width: 100%;
+    transition: height .28s var(--ease);
   }
   .header-main { top: 18px; right: 18px; }
   .header-actions { width: 72px; height: var(--control-h); gap: 6px; justify-content: flex-end; }
@@ -1328,6 +1337,7 @@ h1 {
     gap: 10px;
     min-height: 0;
     padding: 4px 16px 10px;
+    transition: top .28s var(--ease), padding .28s var(--ease), min-height .28s var(--ease), background .28s var(--ease);
   }
   .toolbar .header-actions {
     top: 4px;
@@ -1336,6 +1346,7 @@ h1 {
   }
   .platform-select {
     width: calc(100% - 82px);
+    transition: width .28s var(--ease);
   }
   .platform-select-trigger { width: 100%; }
   .platform-select-panel {
@@ -1347,6 +1358,7 @@ h1 {
     flex: 1 1 0;
     width: auto;
     min-width: 128px;
+    transition: opacity .2s var(--ease), transform .28s var(--ease);
   }
   .filter-strip {
     position: relative;
@@ -1359,6 +1371,7 @@ h1 {
     overflow-x: visible;
     overflow-y: visible;
     padding: 0 2px 4px;
+    transition: opacity .2s var(--ease), transform .28s var(--ease);
   }
   .filter-menu { margin-left: 0; }
   .filter-menu summary,
@@ -1443,6 +1456,49 @@ h1 {
     left: auto;
     right: 0;
   }
+  body.is-mobile-compact-top .workspace {
+    padding-top: var(--compact-top-h);
+  }
+  body.is-mobile-compact-top .workspace-topbar {
+    min-height: var(--compact-top-h);
+    padding: 6px 10px 6px 154px;
+    z-index: 92;
+    background: color-mix(in srgb, var(--bg) 96%, transparent);
+  }
+  body.is-mobile-compact-top .header-platforms {
+    height: 46px;
+  }
+  body.is-mobile-compact-top .header-marquee {
+    height: 46px;
+  }
+  body.is-mobile-compact-top .toolbar {
+    top: 0;
+    z-index: 96;
+    height: var(--compact-top-h);
+    max-height: var(--compact-top-h);
+    min-height: var(--compact-top-h);
+    padding: 12px 10px;
+    background: transparent;
+    pointer-events: none;
+  }
+  body.is-mobile-compact-top .platform-select {
+    width: 136px;
+    pointer-events: auto;
+  }
+  body.is-mobile-compact-top .platform-select-trigger {
+    height: 34px;
+  }
+  body.is-mobile-compact-top .platform-select-panel {
+    width: calc(100vw - 20px);
+  }
+  body.is-mobile-compact-top .search-box,
+  body.is-mobile-compact-top .filter-strip,
+  body.is-mobile-compact-top .toolbar .header-actions {
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(-8px);
+    pointer-events: none;
+  }
   .artboard-grid.is-card-hovering .artboard-card:not(.is-card-hovered) {
     opacity: 1;
     filter: none;
@@ -1456,7 +1512,10 @@ h1 {
     gap: 24px 14px;
     width: 100%;
   }
-  .artboard-stage { min-height: 150px; }
+  .artboard-stage {
+    min-height: 150px;
+    align-items: end;
+  }
   .board-info strong { font-size: 13px; }
   .detail-layout { grid-template-columns: 1fr; }
   .dpi-grid, .specs { grid-template-columns: 1fr; }
