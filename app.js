@@ -158,6 +158,7 @@ let hoverClearTimer = 0;
 let temporaryPlatformHighlight = null;
 let platformDrag = null;
 let suppressPlatformClick = false;
+let platformSelectCloseTimer = 0;
 let dragDepth = 0;
 let hasRenderedBoards = false;
 let imageRenderVersion = 0;
@@ -252,10 +253,14 @@ function bindEvents() {
   });
 
   els.platformSelect.addEventListener("mouseenter", () => {
+    window.clearTimeout(platformSelectCloseTimer);
     els.platformSelect.setAttribute("open", "");
   });
   els.platformSelect.addEventListener("mouseleave", () => {
-    els.platformSelect.removeAttribute("open");
+    window.clearTimeout(platformSelectCloseTimer);
+    platformSelectCloseTimer = window.setTimeout(() => {
+      els.platformSelect.removeAttribute("open");
+    }, 140);
   });
   els.platformSelectSummary.addEventListener("click", event => {
     if (window.matchMedia("(hover: hover)").matches) {
@@ -781,7 +786,7 @@ function createBoardCard(item, index, renderKey) {
     const showTitleIcon = !shouldHideCardPlatformIcon();
   const template = document.createElement("template");
   template.innerHTML = `
-      <button class="artboard-card" data-id="${item.id}" data-highlight-platform="${item.platformId}" type="button" aria-label="${platform.name} ${item.title} ${formatSize(item)}" style="--card-index:${index}; view-transition-name:${cardTransitionName(item.id)}">
+      <button class="artboard-card" data-id="${item.id}" data-highlight-platform="${platform.id}" type="button" aria-label="${platform.name} ${item.title} ${formatSize(item)}" style="--card-index:${index}; view-transition-name:${cardTransitionName(item.id)}">
         <div class="artboard-stage" style="--tooltip-offset:${Math.round(size.h / 2 + 8)}px">
           <div class="board-tooltip">${detail}</div>
           <div class="artboard ${preview ? "has-preview" : ""} ${state.showSizes ? "" : "hide-size"}" data-ratio="${item.ratio}" style="--board-w:${size.w}px; --board-h:${size.h}px; --size-font:${size.font}px">
@@ -824,6 +829,7 @@ function setHoveredCard(card) {
   els.artboardGrid.classList.add("is-card-hovering");
   card.classList.add("is-card-hovered");
   updatePlatformActiveState();
+  revealPlatformButton(temporaryPlatformHighlight);
 }
 
 function scheduleHoverClear(card) {
@@ -841,6 +847,30 @@ function clearHoveredCard() {
   temporaryPlatformHighlight = null;
   els.artboardGrid.classList.remove("is-card-hovering");
   updatePlatformActiveState();
+}
+
+function revealPlatformButton(platformId) {
+  if (!platformId || platformId === "all") return;
+  const escapedPlatformId = window.CSS?.escape ? CSS.escape(platformId) : platformId.replace(/"/g, '\\"');
+  const button = els.platformNav.querySelector(`.platform-button[data-platform="${escapedPlatformId}"]`);
+  if (!button) return;
+
+  const wrapperWidth = els.platformCenter.clientWidth;
+  const buttonLeft = button.offsetLeft;
+  const buttonRight = buttonLeft + button.offsetWidth;
+  const padding = 14;
+  let nextOffset = state.platformOffset;
+
+  if (buttonLeft < state.platformOffset + padding) {
+    nextOffset = buttonLeft - padding;
+  } else if (buttonRight > state.platformOffset + wrapperWidth - padding) {
+    nextOffset = buttonRight - wrapperWidth + padding;
+  }
+
+  nextOffset = Math.max(0, Math.min(maxPlatformOffset(), nextOffset));
+  if (Math.abs(nextOffset - state.platformOffset) < 1) return;
+  state.platformOffset = nextOffset;
+  syncPlatformCarousel();
 }
 
 function clearBoardPreviews() {
