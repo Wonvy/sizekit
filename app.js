@@ -389,7 +389,8 @@ function bindEvents() {
   }, { passive: false });
 
   els.platformNav.parentElement.addEventListener("pointerdown", startPlatformDrag);
-  els.platformNav.parentElement.addEventListener("pointermove", movePlatformDrag);
+  els.platformNav.parentElement.addEventListener("pointermove", handlePlatformPointerMove);
+  els.platformNav.parentElement.addEventListener("pointerleave", resetPlatformDockEffect);
   els.platformNav.parentElement.addEventListener("pointerup", endPlatformDrag);
   els.platformNav.parentElement.addEventListener("pointercancel", endPlatformDrag);
   updateMobileTopMode();
@@ -685,6 +686,7 @@ function scrollPlatformPage(direction) {
   const step = Math.max(1, els.platformCenter.clientWidth * .82);
   const nextOffset = state.platformOffset + direction * step;
   state.platformOffset = Math.max(0, Math.min(maxPlatformOffset(), nextOffset));
+  resetPlatformDockEffect();
   syncPlatformCarousel();
 }
 
@@ -719,12 +721,21 @@ function movePlatformDrag(event) {
   syncPlatformCarousel({ immediate: true });
 }
 
+function handlePlatformPointerMove(event) {
+  if (platformDrag) {
+    movePlatformDrag(event);
+    return;
+  }
+  updatePlatformDockEffect(event.clientX);
+}
+
 function endPlatformDrag(event) {
   if (!platformDrag || platformDrag.pointerId !== event.pointerId) return;
   if (els.platformCenter.hasPointerCapture?.(event.pointerId)) {
     els.platformCenter.releasePointerCapture?.(event.pointerId);
   }
   els.platformCenter.classList.remove("is-drag-ready", "is-dragging");
+  resetPlatformDockEffect();
   if (!platformDrag.moved) suppressPlatformClick = false;
   if (platformDrag.moved) {
     window.setTimeout(() => {
@@ -756,19 +767,39 @@ function isMobileAllPlatformState(platformId) {
 function syncPlatformCarousel({ immediate = false } = {}) {
   requestAnimationFrame(() => {
     const wrapper = els.platformCenter;
-    const buttons = Array.from(els.platformNav.querySelectorAll(".platform-button"));
     state.platformOffset = Math.max(0, Math.min(maxPlatformOffset(), state.platformOffset));
     const navWidth = els.platformNav.scrollWidth;
     const centerOffset = maxPlatformOffset() === 0 ? Math.max(0, (wrapper.clientWidth - navWidth) / 2) : 0;
     els.platformNav.classList.toggle("no-transition", immediate);
     els.platformNav.style.transform = `translateX(${(centerOffset - state.platformOffset).toFixed(2)}px)`;
 
-    buttons.forEach(button => {
-      button.style.setProperty("--edge-scale", "1");
-      button.style.setProperty("--edge-opacity", "1");
-    });
-
     if (immediate) requestAnimationFrame(() => els.platformNav.classList.remove("no-transition"));
+  });
+}
+
+function updatePlatformDockEffect(pointerX) {
+  if (isMobileViewport() || platformDrag) return;
+  const influence = 128;
+  const maxScale = 1.52;
+  const buttons = Array.from(els.platformNav.querySelectorAll(".platform-button"));
+
+  buttons.forEach(button => {
+    const rect = button.getBoundingClientRect();
+    const center = rect.left + rect.width / 2;
+    const distance = Math.min(influence, Math.abs(pointerX - center));
+    const strength = 1 - distance / influence;
+    const eased = strength <= 0 ? 0 : Math.sin(strength * Math.PI / 2);
+    const scale = 1 + eased * (maxScale - 1);
+    const opacity = .62 + eased * .38;
+    button.style.setProperty("--edge-scale", scale.toFixed(3));
+    button.style.setProperty("--edge-opacity", opacity.toFixed(3));
+  });
+}
+
+function resetPlatformDockEffect() {
+  els.platformNav.querySelectorAll(".platform-button").forEach(button => {
+    button.style.setProperty("--edge-scale", "1");
+    button.style.setProperty("--edge-opacity", "1");
   });
 }
 

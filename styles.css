@@ -121,6 +121,7 @@ input {
   text-decoration: none;
   opacity: var(--edge-opacity, 1);
   transform: scale(var(--edge-scale, 1));
+  transform-origin: center center;
   user-select: none;
 }
 
@@ -130,7 +131,7 @@ input {
   flex-direction: row;
   align-items: center;
   gap: 16px;
-  height: 46px;
+  height: 58px;
   width: max-content;
   padding: 0 10px;
   transition: transform .32s var(--ease);
@@ -156,7 +157,7 @@ input {
   border: 1px solid transparent;
   background: transparent;
   cursor: inherit;
-  transition: background .16s var(--ease), border-color .16s var(--ease), transform .18s var(--ease);
+  transition: background .16s var(--ease), border-color .16s var(--ease), transform .16s cubic-bezier(.2,.9,.2,1), opacity .16s var(--ease);
 }
 .platform-button:hover {
   background: var(--panel-soft);
@@ -402,11 +403,11 @@ input {
   opacity: 0;
   pointer-events: none;
   white-space: nowrap;
-  padding: 4px 8px;
-  border-radius: 999px;
+  padding: 0;
+  border-radius: 0;
   color: var(--text-soft);
-  background: var(--panel);
-  border: 1px solid var(--line);
+  background: transparent;
+  border: 0;
   box-shadow: none;
   font-size: 14px;
   font-weight: 680;
