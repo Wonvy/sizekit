@@ -100,7 +100,7 @@
       "name": "Threads",
       "short": "Th",
       "color": "#111111",
-      "category": "????",
+      "category": "海外平台",
       "iconUrl": "https://www.threads.net/favicon.ico"
     },
     {
@@ -108,15 +108,15 @@
       "name": "Snapchat",
       "short": "SC",
       "color": "#FFFC00",
-      "category": "????",
+      "category": "海外平台",
       "iconUrl": "https://www.snapchat.com/favicon.ico"
     },
     {
       "id": "google-business",
-      "name": "Google ??",
+      "name": "Google 商家",
       "short": "G",
       "color": "#4285F4",
-      "category": "????",
+      "category": "海外平台",
       "iconUrl": "https://www.google.com/favicon.ico"
     },
     {
@@ -124,7 +124,7 @@
       "name": "Behance",
       "short": "Be",
       "color": "#1769FF",
-      "category": "????",
+      "category": "设计平台",
       "iconUrl": "https://www.behance.net/favicon.ico"
     },
     {
@@ -132,7 +132,7 @@
       "name": "Dribbble",
       "short": "Db",
       "color": "#EA4C89",
-      "category": "????",
+      "category": "设计平台",
       "iconUrl": "https://dribbble.com/favicon.ico"
     },
     {
@@ -140,15 +140,15 @@
       "name": "Bilibili",
       "short": "B",
       "color": "#00A1D6",
-      "category": "?????",
+      "category": "国内新媒体",
       "iconUrl": "https://www.bilibili.com/favicon.ico"
     },
     {
       "id": "weibo",
-      "name": "??",
-      "short": "?",
+      "name": "微博",
+      "short": "微",
       "color": "#E6162D",
-      "category": "?????",
+      "category": "国内新媒体",
       "iconUrl": "https://weibo.com/favicon.ico"
     },
     {
@@ -1372,80 +1372,80 @@
     {
       "id": "threads-profile",
       "platformId": "threads",
-      "title": "??",
+      "title": "头像",
       "width": 320,
       "height": 320,
       "unit": "px",
       "ratio": "1:1",
-      "bleed": "?????????",
-      "note": "Threads ??????????????????",
+      "bleed": "圆形裁切，主体居中",
+      "note": "Threads 头像常用方图上传，展示时会圆形裁切。",
       "tags": [
-        "??",
-        "??"
+        "头像",
+        "方图"
       ],
       "dpi": null
     },
     {
       "id": "threads-post-portrait",
       "platformId": "threads",
-      "title": "?????",
+      "title": "信息流竖图",
       "width": 1080,
       "height": 1350,
       "unit": "px",
       "ratio": "4:5",
-      "bleed": "????????????",
-      "note": "????????????",
+      "bleed": "顶部和底部保留安全区",
+      "note": "适合占屏更高的图文内容。",
       "tags": [
-        "???",
-        "??"
+        "信息流",
+        "竖图"
       ],
       "dpi": null
     },
     {
       "id": "threads-post-square",
       "platformId": "threads",
-      "title": "?????",
+      "title": "信息流方图",
       "width": 1080,
       "height": 1080,
       "unit": "px",
       "ratio": "1:1",
-      "bleed": "???????????",
-      "note": "?????????",
+      "bleed": "主体居中，避免边缘裁切",
+      "note": "通用方图发布尺寸。",
       "tags": [
-        "???",
-        "??"
+        "信息流",
+        "方图"
       ],
       "dpi": null
     },
     {
       "id": "threads-link",
       "platformId": "threads",
-      "title": "?????",
+      "title": "链接预览图",
       "width": 1200,
       "height": 628,
       "unit": "px",
-      "ratio": "? 1.91:1",
-      "bleed": "??????????",
-      "note": "?????????????",
+      "ratio": "约 1.91:1",
+      "bleed": "文字不要贴近边缘",
+      "note": "适合链接卡片和横向分享图。",
       "tags": [
-        "??",
-        "??"
+        "链接",
+        "横图"
       ],
       "dpi": null
     },
     {
       "id": "snapchat-profile",
       "platformId": "snapchat",
-      "title": "??",
+      "title": "头像",
       "width": 320,
       "height": 320,
       "unit": "px",
       "ratio": "1:1",
-      "bleed": "?????????",
-      "note": "Snapchat ???????",
+      "bleed": "圆形裁切，主体居中",
+      "note": "Snapchat 头像常用方图。",
       "tags": [
-        "??",
-        "??"
+        "头像",
+        "方图"
       ],
       "dpi": null
     },
@@ -1457,299 +1457,299 @@
       "height": 1920,
       "unit": "px",
       "ratio": "9:16",
-      "bleed": "??????????",
-      "note": "Snapchat Story???????????????",
+      "bleed": "顶部和底部保留安全区",
+      "note": "Snapchat Story、滤镜、全屏广告常用竖版尺寸。",
       "tags": [
         "Story",
-        "??"
+        "竖屏"
       ],
       "dpi": null
     },
     {
       "id": "snapchat-ad",
       "platformId": "snapchat",
-      "title": "????",
+      "title": "全屏广告",
       "width": 1080,
       "height": 1920,
       "unit": "px",
       "ratio": "9:16",
-      "bleed": "?? UI ???????????",
-      "note": "????????????",
+      "bleed": "上下 UI 区域避免放置按钮和小字",
+      "note": "适合移动端全屏广告素材。",
       "tags": [
-        "??",
-        "??"
+        "广告",
+        "竖屏"
       ],
       "dpi": null
     },
     {
       "id": "google-business-logo",
       "platformId": "google-business",
-      "title": "?? Logo",
+      "title": "商家 Logo",
       "width": 720,
       "height": 720,
       "unit": "px",
       "ratio": "1:1",
-      "bleed": "?????????????",
-      "note": "Google ???? Logo ???????",
+      "bleed": "圆形或方形展示均需主体居中",
+      "note": "Google 商家资料 Logo 常用上传尺寸。",
       "tags": [
         "Logo",
-        "??"
+        "方图"
       ],
       "dpi": null
     },
     {
       "id": "google-business-cover",
       "platformId": "google-business",
-      "title": "????",
+      "title": "商家封面",
       "width": 1024,
       "height": 576,
       "unit": "px",
       "ratio": "16:9",
-      "bleed": "??????????????",
-      "note": "???????????",
+      "bleed": "主体和文字放在中心安全区",
+      "note": "适合商家资料封面展示。",
       "tags": [
-        "??",
-        "??"
+        "封面",
+        "横图"
       ],
       "dpi": null
     },
     {
       "id": "google-business-post",
       "platformId": "google-business",
-      "title": "????",
+      "title": "商家动态",
       "width": 720,
       "height": 720,
       "unit": "px",
       "ratio": "1:1",
-      "bleed": "???????????",
-      "note": "??????????????",
+      "bleed": "主体居中，避免边缘裁切",
+      "note": "适合商家动态、活动和产品图。",
       "tags": [
-        "??",
-        "??"
+        "动态",
+        "方图"
       ],
       "dpi": null
     },
     {
       "id": "behance-cover",
       "platformId": "behance",
-      "title": "????",
+      "title": "项目封面",
       "width": 808,
       "height": 632,
       "unit": "px",
-      "ratio": "? 4:3",
-      "bleed": "??????????????",
-      "note": "Behance ?????????????",
+      "ratio": "约 4:3",
+      "bleed": "封面会被裁切，标题和主体居中",
+      "note": "Behance 项目封面最低推荐上传尺寸。",
       "tags": [
-        "??",
-        "??"
+        "项目",
+        "封面"
       ],
       "dpi": null
     },
     {
       "id": "behance-project-image",
       "platformId": "behance",
-      "title": "?????",
+      "title": "项目展示图",
       "width": 1400,
       "height": 1000,
       "unit": "px",
       "ratio": "7:5",
-      "bleed": "?? 1400px ???????",
-      "note": "?? Behance ????????",
+      "bleed": "宽度 1400px 适合项目页展示",
+      "note": "适合 Behance 项目正文展示图。",
       "tags": [
-        "??",
-        "???"
+        "项目",
+        "作品集"
       ],
       "dpi": null
     },
     {
       "id": "behance-banner",
       "platformId": "behance",
-      "title": "?????",
+      "title": "作品集横幅",
       "width": 1400,
       "height": 560,
       "unit": "px",
       "ratio": "5:2",
-      "bleed": "??????????",
-      "note": "?????????????",
+      "bleed": "文字不要贴近边缘",
+      "note": "适合项目页首图或横向展示。",
       "tags": [
-        "??",
-        "???"
+        "横幅",
+        "作品集"
       ],
       "dpi": null
     },
     {
       "id": "dribbble-shot",
       "platformId": "dribbble",
-      "title": "Shot ???",
+      "title": "Shot 高清图",
       "width": 1600,
       "height": 1200,
       "unit": "px",
       "ratio": "4:3",
-      "bleed": "?????????????",
-      "note": "Dribbble ?? Shot ?????????",
+      "bleed": "主体居中，缩略图中仍需清晰",
+      "note": "Dribbble 静态 Shot 常用高清上传尺寸。",
       "tags": [
         "Shot",
-        "??"
+        "作品"
       ],
       "dpi": null
     },
     {
       "id": "dribbble-thumbnail",
       "platformId": "dribbble",
-      "title": "Shot ???",
+      "title": "Shot 缩略图",
       "width": 800,
       "height": 600,
       "unit": "px",
       "ratio": "4:3",
-      "bleed": "????????????",
-      "note": "Dribbble ????????",
+      "bleed": "小尺寸展示时确保主体突出",
+      "note": "Dribbble 经典缩略图比例。",
       "tags": [
-        "???",
-        "??"
+        "缩略图",
+        "作品"
       ],
       "dpi": null
     },
     {
       "id": "dribbble-wide",
       "platformId": "dribbble",
-      "title": "????",
+      "title": "宽幅展示",
       "width": 1400,
       "height": 1050,
       "unit": "px",
       "ratio": "4:3",
-      "bleed": "????????????",
-      "note": "? 4:3 ????????????",
+      "bleed": "适合新版更宽的作品展示页",
+      "note": "按 4:3 比例适配更宽的展示区域。",
       "tags": [
-        "??",
-        "??"
+        "展示",
+        "宽幅"
       ],
       "dpi": null
     },
     {
       "id": "bilibili-cover",
       "platformId": "bilibili",
-      "title": "????",
+      "title": "视频封面",
       "width": 1146,
       "height": 717,
       "unit": "px",
-      "ratio": "? 16:10",
-      "bleed": "??????????",
-      "note": "Bilibili ???????????",
+      "ratio": "约 16:10",
+      "bleed": "标题字和主体不要贴边",
+      "note": "Bilibili 视频投稿常用封面尺寸。",
       "tags": [
-        "??",
-        "??"
+        "视频",
+        "封面"
       ],
       "dpi": null
     },
     {
       "id": "bilibili-cover-16-9",
       "platformId": "bilibili",
-      "title": "??????",
+      "title": "视频横版封面",
       "width": 1920,
       "height": 1080,
       "unit": "px",
       "ratio": "16:9",
-      "bleed": "??????????",
-      "note": "????????????????",
+      "bleed": "适合高清横版视频封面",
+      "note": "适合通用横屏视频封面和二次裁切。",
       "tags": [
-        "??",
-        "??"
+        "视频",
+        "横图"
       ],
       "dpi": null
     },
     {
       "id": "bilibili-avatar",
       "platformId": "bilibili",
-      "title": "??",
+      "title": "头像",
       "width": 400,
       "height": 400,
       "unit": "px",
       "ratio": "1:1",
-      "bleed": "?????????",
-      "note": "UP ????????",
+      "bleed": "圆形裁切，主体居中",
+      "note": "UP 主头像常用方图。",
       "tags": [
-        "??",
-        "??"
+        "头像",
+        "方图"
       ],
       "dpi": null
     },
     {
       "id": "bilibili-dynamic",
       "platformId": "bilibili",
-      "title": "????",
+      "title": "动态配图",
       "width": 1080,
       "height": 1080,
       "unit": "px",
       "ratio": "1:1",
-      "bleed": "??????????",
-      "note": "??????????????",
+      "bleed": "主体居中，避免边缘裁切",
+      "note": "适合动态、专栏配图和活动图。",
       "tags": [
-        "??",
-        "??"
+        "动态",
+        "方图"
       ],
       "dpi": null
     },
     {
       "id": "weibo-avatar",
       "platformId": "weibo",
-      "title": "??",
+      "title": "头像",
       "width": 400,
       "height": 400,
       "unit": "px",
       "ratio": "1:1",
-      "bleed": "?????????",
-      "note": "?????????",
+      "bleed": "圆形裁切，主体居中",
+      "note": "微博头像常用方图。",
       "tags": [
-        "??",
-        "??"
+        "头像",
+        "方图"
       ],
       "dpi": null
     },
     {
       "id": "weibo-cover",
       "platformId": "weibo",
-      "title": "????",
+      "title": "主页封面",
       "width": 920,
       "height": 300,
       "unit": "px",
-      "ratio": "? 3.07:1",
-      "bleed": "????????????",
-      "note": "?????????????",
+      "ratio": "约 3.07:1",
+      "bleed": "横向极宽，文字和主体居中",
+      "note": "微博主页头图常用横幅尺寸。",
       "tags": [
-        "??",
-        "??"
+        "主页",
+        "横幅"
       ],
       "dpi": null
     },
     {
       "id": "weibo-post-square",
       "platformId": "weibo",
-      "title": "????",
+      "title": "微博方图",
       "width": 1080,
       "height": 1080,
       "unit": "px",
       "ratio": "1:1",
-      "bleed": "??????????",
-      "note": "????????????",
+      "bleed": "主体居中，避免边缘裁切",
+      "note": "适合微博单图或多图内容。",
       "tags": [
-        "??",
-        "??"
+        "配图",
+        "方图"
       ],
       "dpi": null
     },
     {
       "id": "weibo-post-long",
       "platformId": "weibo",
-      "title": "??",
+      "title": "长图",
       "width": 1080,
       "height": 1920,
       "unit": "px",
       "ratio": "9:16",
-      "bleed": "??????????????",
-      "note": "?????????????",
+      "bleed": "顶部放标题，正文保持足够字号",
+      "note": "适合海报式长图和活动说明。",
       "tags": [
-        "??",
-        "??"
+        "长图",
+        "海报"
       ],
       "dpi": null
     }

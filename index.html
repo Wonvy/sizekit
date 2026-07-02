@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="zh-CN">
+<html lang="zh-CN" data-loading="true">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -19,11 +19,20 @@
           <div class="platform-hover-title" id="platformHoverTitle" aria-hidden="true"></div>
           <div class="header-actions">
             <button class="theme-action" id="themeToggle" type="button" aria-label="切换背景">◐</button>
+            <button class="language-action" id="languageToggle" type="button" aria-label="切换语言">
+              <svg viewBox="0 0 24 24" aria-hidden="true">
+                <path d="M4 5h9v2H9.8a13.7 13.7 0 0 1-1.6 3.8c.8.7 1.6 1.3 2.5 1.8l-1 1.7a13.2 13.2 0 0 1-2.6-2 12.4 12.4 0 0 1-3 2.3L3 12.9a10.4 10.4 0 0 0 2.9-2.1A12.4 12.4 0 0 1 4.4 8l1.7-.7c.3.8.7 1.5 1.1 2.1.4-.7.8-1.5 1-2.4H4V5Zm13.3 3h1.9l3.1 9h-2l-.6-1.8h-3l-.6 1.8h-2l3.2-9Zm-.1 5.5h1.9l-.9-2.9-1 2.9ZM12 17h11v2H12v-2Z"/>
+              </svg>
+            </button>
           </div>
         </div>
       </header>
 
       <section class="toolbar" aria-label="搜索和尺寸过滤器">
+        <div class="platform-select" id="platformSelect">
+          <button class="platform-select-trigger" id="platformSelectSummary" type="button"></button>
+          <div class="platform-select-panel" id="platformSelectPanel"></div>
+        </div>
         <label class="search-box" aria-label="搜索尺寸">
           <span>⌕</span>
           <input id="searchInput" type="search" autocomplete="off" placeholder="搜索尺寸" />
@@ -54,12 +63,12 @@
           <div class="detail-preview" id="detailPreview"><span id="detailRatioText">1:1</span></div>
         </div>
         <dl class="specs">
-          <div><dt>尺寸</dt><dd id="detailSize"></dd></div>
-          <div><dt>比例</dt><dd id="detailRatio"></dd></div>
-          <div><dt>单位</dt><dd id="detailUnit"></dd></div>
-          <div><dt>类型</dt><dd id="detailCategory"></dd></div>
+          <div><dt data-i18n="size">尺寸</dt><dd id="detailSize"></dd></div>
+          <div><dt data-i18n="ratio">比例</dt><dd id="detailRatio"></dd></div>
+          <div><dt data-i18n="unit">单位</dt><dd id="detailUnit"></dd></div>
+          <div><dt data-i18n="type">类型</dt><dd id="detailCategory"></dd></div>
           <div><dt>DPI</dt><dd id="detailDpi"></dd></div>
-          <div><dt>安全区/出血</dt><dd id="detailBleed"></dd></div>
+          <div><dt data-i18n="safeArea">安全区 / 出血</dt><dd id="detailBleed"></dd></div>
         </dl>
       </div>
 
@@ -67,8 +76,8 @@
 
       <section class="dpi-panel" id="dpiPanel" hidden>
         <div class="dpi-title">
-          <strong>DPI 像素换算</strong>
-          <span>按成品尺寸估算，印刷以前以印厂文件为准。</span>
+          <strong data-i18n="dpiConvert">DPI 像素换算</strong>
+          <span data-i18n="dpiNote">按成品尺寸估算，印刷以前以印厂文件为准。</span>
         </div>
         <div class="dpi-grid" id="dpiGrid"></div>
       </section>

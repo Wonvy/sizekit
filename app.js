@@ -1,4 +1,4 @@
-let platforms = [];
+﻿let platforms = [];
 let presets = [];
 let printPlatformIds = new Set();
 
@@ -11,19 +11,75 @@ async function loadSizekitData() {
   printPlatformIds = new Set(Array.isArray(data.printPlatformIds) ? data.printPlatformIds : []);
 }
 
-const categoryFilters = [
-  { id: "all", label: "全部" },
-  { id: "print", label: "印刷" }
-];
-
-const unitFilters = [
-  { id: "all", label: "全部单位" },
-  { id: "px", label: "px" },
-  { id: "physical", label: "mm / cm" }
-];
+const UI_TEXT = {
+  zh: {
+    all: "全部",
+    print: "印刷",
+    allUnits: "全部单位",
+    allRatios: "全部比例",
+    defaultSort: "默认排序",
+    sizeAsc: "尺寸从小到大",
+    sizeDesc: "尺寸从大到小",
+    showImages: "显示图片",
+    showSizes: "显示尺寸",
+    searchSize: "搜索尺寸",
+    switchLight: "切换浅色主题",
+    switchDark: "切换深色主题",
+    switchLanguage: "切换语言",
+    languageButton: "中文",
+    sizeDetail: "尺寸详情",
+    size: "尺寸",
+    ratio: "比例",
+    unit: "单位",
+    type: "类型",
+    safeArea: "安全区 / 出血",
+    dpiConvert: "DPI 像素换算",
+    dpiNote: "按成品尺寸估算，印刷以前以印厂文件为准。",
+    copySize: "复制尺寸",
+    copyRatio: "复制比例",
+    noImages: "没有找到可预览的图片",
+    addedImages: count => `已加入 ${count} 张图片`,
+    copied: text => `已复制：${text}`,
+    dpiSuggestion: dpi => `${dpi} dpi 建议`,
+    notApplicable: "不适用",
+    loadError: "数据加载失败，请检查 data.json"
+  },
+  en: {
+    all: "All",
+    print: "Print",
+    allUnits: "All units",
+    allRatios: "All ratios",
+    defaultSort: "Default",
+    sizeAsc: "Size ascending",
+    sizeDesc: "Size descending",
+    showImages: "Images",
+    showSizes: "Sizes",
+    searchSize: "Search sizes",
+    switchLight: "Switch to light theme",
+    switchDark: "Switch to dark theme",
+    switchLanguage: "Switch language",
+    languageButton: "EN",
+    sizeDetail: "Size details",
+    size: "Size",
+    ratio: "Ratio",
+    unit: "Unit",
+    type: "Type",
+    safeArea: "Safe area / bleed",
+    dpiConvert: "DPI pixel conversion",
+    dpiNote: "Estimated from final size. Confirm print files with your print vendor.",
+    copySize: "Copy size",
+    copyRatio: "Copy ratio",
+    noImages: "No previewable images found",
+    addedImages: count => `Added ${count} image${count === 1 ? "" : "s"}`,
+    copied: text => `Copied: ${text}`,
+    dpiSuggestion: dpi => `${dpi} dpi suggested`,
+    notApplicable: "N/A",
+    loadError: "Failed to load data. Check data.json."
+  }
+};
 
 const ratioFilters = [
-  { id: "all", label: "全部比例", ratio: null },
+  { id: "all", labelKey: "allRatios", ratio: null },
   { id: "ratio-1-1", label: "1:1", ratio: 1 },
   { id: "ratio-3-4", label: "3:4", ratio: 3 / 4 },
   { id: "ratio-4-3", label: "4:3", ratio: 4 / 3 },
@@ -34,9 +90,9 @@ const ratioFilters = [
 ];
 
 const sortOptions = [
-  { id: "default", label: "默认排序" },
-  { id: "size-asc", label: "尺寸从小到大" },
-  { id: "size-desc", label: "尺寸从大到小" }
+  { id: "default", labelKey: "defaultSort" },
+  { id: "size-asc", labelKey: "sizeAsc" },
+  { id: "size-desc", labelKey: "sizeDesc" }
 ];
 
 const BOARD_SIZE_FONT_MIN = 9;
@@ -49,12 +105,11 @@ const IMAGE_CACHE_LOCAL_KEY = "sizekit-dropped-images";
 
 const state = {
   selectedPlatform: "all",
-  categoryFilter: "all",
-  unitFilter: "all",
   ratioFilter: "all",
   sortMode: "default",
   query: "",
   theme: localStorage.getItem("sizekit-theme") || "light",
+  language: localStorage.getItem("sizekit-language") || "zh",
   showImages: true,
   showSizes: true,
   images: [],
@@ -66,10 +121,14 @@ const els = {
   platformCenter: document.querySelector("#platformCenter"),
   platformNav: document.querySelector("#platformNav"),
   platformHoverTitle: document.querySelector("#platformHoverTitle"),
+  platformSelect: document.querySelector("#platformSelect"),
+  platformSelectSummary: document.querySelector("#platformSelectSummary"),
+  platformSelectPanel: document.querySelector("#platformSelectPanel"),
   filterStrip: document.querySelector("#filterStrip"),
   searchInput: document.querySelector("#searchInput"),
   artboardGrid: document.querySelector("#artboardGrid"),
   themeToggle: document.querySelector("#themeToggle"),
+  languageToggle: document.querySelector("#languageToggle"),
   dialog: document.querySelector("#detailDialog"),
   closeDialog: document.querySelector("#closeDialog"),
   detailLogo: document.querySelector("#detailLogo"),
@@ -95,6 +154,8 @@ const els = {
 let activePreset = null;
 let hoverFrame = 0;
 let dragDepth = 0;
+let hasRenderedBoards = false;
+let imageRenderVersion = 0;
 
 const pinyinInitials = {
   "全":"q","部":"b","国":"g","内":"n","短":"d","视":"s","频":"p","海":"h","外":"w","印":"y","刷":"s",
@@ -110,19 +171,50 @@ const pinyinInitials = {
 
 init();
 
+function ui(key, ...args) {
+  const value = UI_TEXT[state.language]?.[key] ?? UI_TEXT.zh[key] ?? key;
+  return typeof value === "function" ? value(...args) : value;
+}
+
+function labelText(item) {
+  return item.labelKey ? ui(item.labelKey) : item.label;
+}
+
+function applyLanguage() {
+  document.documentElement.lang = state.language === "zh" ? "zh-CN" : "en";
+  els.searchInput.placeholder = ui("searchSize");
+  els.searchInput.closest("label")?.setAttribute("aria-label", ui("searchSize"));
+  els.filterStrip.setAttribute("aria-label", state.language === "zh" ? "尺寸过滤器" : "Size filters");
+  els.languageToggle.setAttribute("aria-label", ui("switchLanguage"));
+  els.languageToggle.title = ui("switchLanguage");
+  els.detailTitle.textContent = ui("sizeDetail");
+  els.copySizeButton.textContent = ui("copySize");
+  els.copyRatioButton.textContent = ui("copyRatio");
+  document.querySelectorAll("[data-i18n]").forEach(element => {
+    element.textContent = ui(element.dataset.i18n);
+  });
+  updateThemeToggle();
+}
+
 async function init() {
   document.documentElement.dataset.theme = state.theme;
   updateThemeToggle();
+  applyLanguage();
   bindEvents();
   try {
     await loadSizekitData();
     state.images = await loadCachedImages();
+    imageRenderVersion += 1;
     renderNav();
+    renderPlatformSelect();
     renderFilters();
+    applyLanguage();
     render();
   } catch (error) {
     console.error(error);
-    els.artboardGrid.innerHTML = `<div class="load-error">数据加载失败，请检查 data.json</div>`;
+    els.artboardGrid.innerHTML = `<div class="load-error">${ui("loadError")}</div>`;
+  } finally {
+    document.documentElement.removeAttribute("data-loading");
   }
 }
 
@@ -137,6 +229,35 @@ function bindEvents() {
     document.documentElement.dataset.theme = state.theme;
     localStorage.setItem("sizekit-theme", state.theme);
     updateThemeToggle();
+  });
+
+  els.languageToggle.addEventListener("click", () => {
+    state.language = state.language === "zh" ? "en" : "zh";
+    localStorage.setItem("sizekit-language", state.language);
+    applyLanguage();
+    renderNav();
+    renderPlatformSelect();
+    renderFilters();
+    render();
+    if (activePreset && els.dialog.open) openDetail(activePreset.id);
+  });
+
+  els.platformSelect.addEventListener("mouseenter", () => {
+    els.platformSelect.setAttribute("open", "");
+  });
+  els.platformSelect.addEventListener("mouseleave", () => {
+    els.platformSelect.removeAttribute("open");
+  });
+  els.platformSelectSummary.addEventListener("click", event => {
+    if (window.matchMedia("(hover: hover)").matches) event.preventDefault();
+  });
+  els.platformSelectSummary.addEventListener("focus", () => {
+    els.platformSelect.setAttribute("open", "");
+  });
+  els.platformSelect.addEventListener("focusout", event => {
+    if (!els.platformSelect.contains(event.relatedTarget)) {
+      els.platformSelect.removeAttribute("open");
+    }
   });
 
   els.closeDialog.addEventListener("click", () => els.dialog.close());
@@ -203,6 +324,31 @@ function renderNav() {
   syncPlatformCarousel({ immediate: true });
 }
 
+function renderPlatformSelect() {
+  const selected = getPlatform(state.selectedPlatform);
+  const selectablePlatforms = platforms.filter(item => !printPlatformIds.has(item.id));
+  els.platformSelectSummary.innerHTML = platformSelectOptionMarkup(selected, "platform-select-current");
+  els.platformSelectPanel.innerHTML = selectablePlatforms.map(platform => `
+    <button class="platform-select-option ${platform.id === state.selectedPlatform ? "is-active" : ""}" type="button" data-platform-select="${platform.id}">
+      ${platformSelectOptionMarkup(platform)}
+    </button>
+  `).join("");
+
+  els.platformSelectPanel.querySelectorAll("[data-platform-select]").forEach(button => {
+    button.addEventListener("click", () => {
+      activatePlatform(button.dataset.platformSelect);
+      els.platformSelect.removeAttribute("open");
+    });
+  });
+}
+
+function platformSelectOptionMarkup(platform, extraClass = "") {
+  return `
+    <span class="platform-select-icon platform-icon platform-icon--${platform.id} ${platform.iconUrl ? "official-icon" : ""} ${extraClass}" style="${platform.iconUrl ? `--fallback-color:${platform.color}` : `background:${platform.color}`}">${platformIconMarkup(platform)}</span>
+    <span class="platform-select-name">${platform.name}</span>
+  `;
+}
+
 function showPlatformTitle(button) {
   const navRect = els.platformHoverTitle.parentElement.getBoundingClientRect();
   const buttonRect = button.getBoundingClientRect();
@@ -260,68 +406,37 @@ function platformIcon(id) {
 }
 
 function renderFilters() {
-  const unit = unitFilters.find(item => item.id === state.unitFilter) || unitFilters[0];
   const ratio = ratioFilters.find(item => item.id === state.ratioFilter) || ratioFilters[0];
   const sort = sortOptions.find(item => item.id === state.sortMode) || sortOptions[0];
 
   els.filterStrip.innerHTML = `
-    <div class="filter-chip-group">
-      ${categoryFilters.map(filter => `
-        <button class="filter-chip ${filter.id === state.categoryFilter ? "is-active" : ""}" type="button" data-category-filter="${filter.id}">${filter.label}</button>
-      `).join("")}
-    </div>
-    <details class="filter-menu">
-      <summary>${unit.label}</summary>
-      <div class="filter-menu-panel">
-        ${unitFilters.map(filter => `
-          <button class="filter-option ${filter.id === state.unitFilter ? "is-active" : ""}" type="button" data-unit-filter="${filter.id}">${filter.label}</button>
-        `).join("")}
-      </div>
-    </details>
     <details class="filter-menu ratio-menu">
-      <summary>${ratio.label}</summary>
+      <summary>${labelText(ratio)}</summary>
       <div class="filter-menu-panel">
         ${ratioFilters.map(filter => `
           <button class="filter-option ratio-option ${filter.id === state.ratioFilter ? "is-active" : ""}" type="button" data-ratio-filter="${filter.id}">
-            <span class="ratio-swatch" style="${ratioSwatchStyle(filter.ratio)}">${filter.label}</span>
+            <span class="ratio-swatch" style="${ratioSwatchStyle(filter.ratio)}">${labelText(filter)}</span>
           </button>
         `).join("")}
       </div>
     </details>
     <label class="image-toggle">
       <input id="imageToggle" type="checkbox" ${state.showImages ? "checked" : ""}>
-      <span>显示图片</span>
+      <span>${ui("showImages")}</span>
     </label>
     <label class="image-toggle">
       <input id="sizeToggle" type="checkbox" ${state.showSizes ? "checked" : ""}>
-      <span>显示尺寸</span>
+      <span>${ui("showSizes")}</span>
     </label>
     <details class="filter-menu sort-menu">
-      <summary>${sort.label}</summary>
+      <summary>${labelText(sort)}</summary>
       <div class="filter-menu-panel">
         ${sortOptions.map(option => `
-          <button class="filter-option ${option.id === state.sortMode ? "is-active" : ""}" type="button" data-sort-mode="${option.id}">${option.label}</button>
+          <button class="filter-option ${option.id === state.sortMode ? "is-active" : ""}" type="button" data-sort-mode="${option.id}">${labelText(option)}</button>
         `).join("")}
       </div>
     </details>
   `;
-
-  els.filterStrip.querySelectorAll("[data-category-filter]").forEach(button => {
-    button.addEventListener("click", () => {
-      state.categoryFilter = button.dataset.categoryFilter;
-      renderFilters();
-      render();
-    });
-  });
-
-  els.filterStrip.querySelectorAll("[data-unit-filter]").forEach(button => {
-    button.addEventListener("click", () => {
-      state.unitFilter = button.dataset.unitFilter;
-      button.closest("details")?.removeAttribute("open");
-      renderFilters();
-      render();
-    });
-  });
 
   els.filterStrip.querySelectorAll("[data-ratio-filter]").forEach(button => {
     button.addEventListener("click", () => {
@@ -334,7 +449,8 @@ function renderFilters() {
 
   els.filterStrip.querySelector("#imageToggle").addEventListener("change", event => {
     state.showImages = event.target.checked;
-    requestAnimationFrame(render);
+    if (!state.showImages) clearBoardPreviews();
+    render();
   });
 
   els.filterStrip.querySelector("#sizeToggle").addEventListener("change", event => {
@@ -371,6 +487,7 @@ function activatePlatform(platformId) {
 
   clearTimeout(hoverFrame);
   updatePlatformActiveState();
+  renderPlatformSelect();
   hidePlatformTitle();
   render();
 }
@@ -419,17 +536,25 @@ function syncPlatformCarousel({ immediate = false } = {}) {
 }
 
 function render() {
-  const rows = filteredPresets();
-  renderBoards(rows);
+  const update = () => {
+    const rows = filteredPresets();
+    renderBoards(rows);
+    hasRenderedBoards = true;
+  };
+
+  if (!hasRenderedBoards || typeof document.startViewTransition !== "function") {
+    update();
+    return;
+  }
+
+  document.startViewTransition(update);
 }
 
 function activeFilterLabels() {
   return [
-    categoryFilters.find(item => item.id === state.categoryFilter),
-    unitFilters.find(item => item.id === state.unitFilter),
     ratioFilters.find(item => item.id === state.ratioFilter),
     sortOptions.find(item => item.id === state.sortMode)
-  ].filter(item => item && item.id !== "all" && item.id !== "default").map(item => item.label);
+  ].filter(item => item && item.id !== "all" && item.id !== "default").map(labelText);
 }
 
 function filteredPresets() {
@@ -439,7 +564,7 @@ function filteredPresets() {
     const inPlatform = state.selectedPlatform === "all"
       || item.platformId === state.selectedPlatform
       || (state.selectedPlatform === "print" && printPlatformIds.has(item.platformId));
-    const inFilter = matchCategoryFilter(item, platform) && matchUnitFilter(item) && matchRatioFilter(item);
+    const inFilter = matchRatioFilter(item);
     const keywordText = [
       platform.name,
       platform.short,
@@ -521,21 +646,6 @@ function platformAliases(id) {
   return aliases[id] || "";
 }
 
-function matchCategoryFilter(item, platform) {
-  switch (state.categoryFilter) {
-    case "print": return platform.category === "平面印刷";
-    default: return true;
-  }
-}
-
-function matchUnitFilter(item) {
-  switch (state.unitFilter) {
-    case "px": return item.unit === "px";
-    case "physical": return item.unit === "mm" || item.unit === "cm";
-    default: return true;
-  }
-}
-
 function matchRatioFilter(item) {
   switch (state.ratioFilter) {
     case "ratio-1-1": return item.ratio.includes("1:1");
@@ -550,14 +660,43 @@ function matchRatioFilter(item) {
 }
 
 function renderBoards(rows) {
-  els.artboardGrid.innerHTML = rows.map(item => {
+  const existingCards = new Map(Array.from(els.artboardGrid.querySelectorAll(".artboard-card")).map(card => [card.dataset.id, card]));
+  const renderedIds = new Set();
+
+  rows.forEach((item, index) => {
+    const renderKey = cardRenderKey(item);
+    let card = existingCards.get(item.id);
+    renderedIds.add(item.id);
+
+    if (!card || card.dataset.renderKey !== renderKey) {
+      const staleCard = card;
+      card = createBoardCard(item, index, renderKey);
+      bindBoardCard(card);
+      if (staleCard) staleCard.replaceWith(card);
+    } else {
+      card.style.setProperty("--card-index", index);
+      card.style.viewTransitionName = cardTransitionName(item.id);
+    }
+
+    if (card.parentElement !== els.artboardGrid || card !== els.artboardGrid.children[index]) {
+      els.artboardGrid.appendChild(card);
+    }
+  });
+
+  existingCards.forEach((card, id) => {
+    if (!renderedIds.has(id)) card.remove();
+  });
+}
+
+function createBoardCard(item, index, renderKey) {
     const platform = displayPlatformForItem(item);
     const sourcePlatform = getPlatform(item.platformId);
     const size = boardSize(item.width, item.height, 170, item.unit);
     const preview = previewForPreset(item, size);
     const detail = [platform.name, sourcePlatform.id !== platform.id ? sourcePlatform.name : "", ...item.tags].filter(Boolean).join(" / ");
-    return `
-      <button class="artboard-card" data-id="${item.id}" type="button" aria-label="${platform.name} ${item.title} ${formatSize(item)}">
+  const template = document.createElement("template");
+  template.innerHTML = `
+      <button class="artboard-card" data-id="${item.id}" type="button" aria-label="${platform.name} ${item.title} ${formatSize(item)}" style="--card-index:${index}; view-transition-name:${cardTransitionName(item.id)}">
         <div class="artboard-stage" style="--tooltip-offset:${Math.round(size.h / 2 + 8)}px">
           <div class="board-tooltip">${detail}</div>
           <div class="artboard ${preview ? "has-preview" : ""} ${state.showSizes ? "" : "hide-size"}" data-ratio="${item.ratio}" style="--board-w:${size.w}px; --board-h:${size.h}px; --size-font:${size.font}px">
@@ -573,22 +712,47 @@ function renderBoards(rows) {
         </div>
       </button>
     `;
-  }).join("");
+  const card = template.content.firstElementChild;
+  card.dataset.renderKey = renderKey;
+  return card;
+}
 
-  els.artboardGrid.querySelectorAll(".artboard-card").forEach(card => {
-    card.addEventListener("mouseenter", () => els.artboardGrid.classList.add("is-card-hovering"));
-    card.addEventListener("mouseleave", () => els.artboardGrid.classList.remove("is-card-hovering"));
-    card.addEventListener("click", () => openDetail(card.dataset.id));
-    card.addEventListener("dblclick", () => {
-      const item = presets.find(preset => preset.id === card.dataset.id);
-      if (item) copyText(formatSize(item));
-    });
+function bindBoardCard(card) {
+  card.addEventListener("pointerenter", () => {
+    els.artboardGrid.classList.add("is-card-hovering");
+    card.classList.add("is-card-hovered");
   });
+  card.addEventListener("pointerleave", () => {
+    els.artboardGrid.classList.remove("is-card-hovering");
+    card.classList.remove("is-card-hovered");
+  });
+  card.addEventListener("click", () => openDetail(card.dataset.id));
+  card.addEventListener("dblclick", () => {
+    const item = presets.find(preset => preset.id === card.dataset.id);
+    if (item) copyText(formatSize(item));
+  });
+}
+
+function clearBoardPreviews() {
+  els.artboardGrid.querySelectorAll(".preview-clip").forEach(preview => preview.remove());
+  els.artboardGrid.querySelectorAll(".artboard.has-preview").forEach(board => board.classList.remove("has-preview"));
+}
+
+function cardRenderKey(item) {
+  return [
+    item.id,
+    state.showImages ? imageRenderVersion : "no-images",
+    state.showSizes ? "sizes" : "no-sizes"
+  ].join(":");
+}
+
+function cardTransitionName(id) {
+  return `card-${id.replace(/[^a-zA-Z0-9_-]/g, "-")}`;
 }
 
 function updateThemeToggle() {
   els.themeToggle.textContent = state.theme === "dark" ? "☼" : "◐";
-  els.themeToggle.setAttribute("aria-label", state.theme === "dark" ? "切换浅色主题" : "切换深色主题");
+  els.themeToggle.setAttribute("aria-label", state.theme === "dark" ? ui("switchLight") : ui("switchDark"));
 }
 
 function renderPreview(preview) {
@@ -636,16 +800,17 @@ async function handleImageDrop(dataTransfer) {
   const files = await droppedFiles(dataTransfer);
   const imageFiles = files.filter(file => file.type.startsWith("image/"));
   if (!imageFiles.length) {
-    showToast("没有找到可预览的图片");
+    showToast(ui("noImages"));
     return;
   }
 
   const images = await Promise.all(imageFiles.map(loadDroppedImage));
   const loadedImages = images.filter(Boolean);
   state.images.push(...loadedImages);
+  imageRenderVersion += 1;
   await saveCachedImages(state.images);
   render();
-  showToast(`已加入 ${loadedImages.length} 张图片`);
+  showToast(ui("addedImages", loadedImages.length));
 }
 
 async function droppedFiles(dataTransfer) {
@@ -842,7 +1007,7 @@ function openDetail(id) {
   els.detailRatio.textContent = item.ratio;
   els.detailUnit.textContent = item.unit;
   els.detailCategory.textContent = platform.category;
-  els.detailDpi.textContent = item.dpi ? `${item.dpi} dpi 建议` : "不适用";
+  els.detailDpi.textContent = item.dpi ? ui("dpiSuggestion", item.dpi) : ui("notApplicable");
   els.detailBleed.textContent = item.bleed;
   els.detailNote.textContent = item.note;
 
@@ -903,7 +1068,7 @@ async function copyText(text) {
     document.execCommand("copy");
     textarea.remove();
   }
-  showToast(`已复制：${text}`);
+  showToast(ui("copied", text));
 }
 
 let toastTimer;
