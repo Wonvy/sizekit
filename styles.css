@@ -19,7 +19,7 @@
   --font-number: Bahnschrift, "DIN Alternate", "Arial Narrow", var(--font-main);
   font-family: var(--font-main);
   font-variant-numeric: tabular-nums;
-  font-size: 14px;
+  font-size: 12px;
 }
 
 :root[data-theme="dark"] {
@@ -817,13 +817,11 @@ h1 {
   pointer-events: none;
   transition: opacity .28s var(--ease);
 }
-.artboard-grid:has(.artboard-card:hover) .artboard-card:not(:hover),
 .artboard-grid.is-card-hovering .artboard-card:not(.is-card-hovered) {
   opacity: .5;
   filter: saturate(.72) brightness(.92);
   transition-delay: .03s;
 }
-.artboard-grid:has(.artboard-card:hover) .artboard-card:not(:hover)::after,
 .artboard-grid.is-card-hovering .artboard-card:not(.is-card-hovered)::after {
   opacity: 1;
 }

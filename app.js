@@ -153,6 +153,8 @@ const els = {
 
 let activePreset = null;
 let hoverFrame = 0;
+let hoveredCard = null;
+let hoverClearTimer = 0;
 let dragDepth = 0;
 let hasRenderedBoards = false;
 let imageRenderVersion = 0;
@@ -660,6 +662,7 @@ function matchRatioFilter(item) {
 }
 
 function renderBoards(rows) {
+  clearHoveredCard();
   const existingCards = new Map(Array.from(els.artboardGrid.querySelectorAll(".artboard-card")).map(card => [card.dataset.id, card]));
   const renderedIds = new Set();
 
@@ -719,18 +722,39 @@ function createBoardCard(item, index, renderKey) {
 
 function bindBoardCard(card) {
   card.addEventListener("pointerenter", () => {
-    els.artboardGrid.classList.add("is-card-hovering");
-    card.classList.add("is-card-hovered");
+    setHoveredCard(card);
   });
   card.addEventListener("pointerleave", () => {
-    els.artboardGrid.classList.remove("is-card-hovering");
-    card.classList.remove("is-card-hovered");
+    scheduleHoverClear(card);
   });
   card.addEventListener("click", () => openDetail(card.dataset.id));
   card.addEventListener("dblclick", () => {
     const item = presets.find(preset => preset.id === card.dataset.id);
     if (item) copyText(formatSize(item));
   });
+}
+
+function setHoveredCard(card) {
+  window.clearTimeout(hoverClearTimer);
+  if (hoveredCard && hoveredCard !== card) hoveredCard.classList.remove("is-card-hovered");
+  hoveredCard = card;
+  els.artboardGrid.classList.add("is-card-hovering");
+  card.classList.add("is-card-hovered");
+}
+
+function scheduleHoverClear(card) {
+  window.clearTimeout(hoverClearTimer);
+  hoverClearTimer = window.setTimeout(() => {
+    if (hoveredCard !== card) return;
+    clearHoveredCard();
+  }, 90);
+}
+
+function clearHoveredCard() {
+  window.clearTimeout(hoverClearTimer);
+  if (hoveredCard) hoveredCard.classList.remove("is-card-hovered");
+  hoveredCard = null;
+  els.artboardGrid.classList.remove("is-card-hovering");
 }
 
 function clearBoardPreviews() {
