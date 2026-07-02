@@ -180,6 +180,42 @@ const pinyinInitials = {
   "区":"q","比":"b","例":"l","尺":"c","寸":"c","搜":"s","索":"s","设":"s","计":"j"
 };
 
+const PLATFORM_EN_NAMES = {
+  wechat: "WeChat Official Account",
+  xiaohongshu: "Xiaohongshu",
+  channels: "WeChat Channels",
+  shortvideo: "Short Video",
+  youtube: "YouTube",
+  instagram: "Instagram",
+  tiktok: "TikTok",
+  x: "X / Twitter",
+  facebook: "Facebook",
+  linkedin: "LinkedIn",
+  pinterest: "Pinterest",
+  threads: "Threads",
+  snapchat: "Snapchat",
+  "google-business": "Google Business",
+  behance: "Behance",
+  dribbble: "Dribbble",
+  bilibili: "Bilibili",
+  weibo: "Weibo",
+  paper: "A Series Paper",
+  card: "Business Card",
+  brochure: "Brochure",
+  fold: "Tri-fold",
+  poster: "Poster",
+  rollup: "Roll-up Banner"
+};
+
+const CATEGORY_EN_NAMES = {
+  "全部": "All",
+  "国内新媒体": "China Social",
+  "短视频": "Short Video",
+  "海外平台": "Global Social",
+  "设计平台": "Design",
+  "平面印刷": "Print"
+};
+
 init();
 
 function ui(key, ...args) {
@@ -193,6 +229,7 @@ function labelText(item) {
 
 function applyLanguage() {
   document.documentElement.lang = state.language === "zh" ? "zh-CN" : "en";
+  updateStaticToolbarIcons();
   els.searchInput.placeholder = ui("searchSize");
   els.searchInput.closest("label")?.setAttribute("aria-label", ui("searchSize"));
   els.filterStrip.setAttribute("aria-label", state.language === "zh" ? "尺寸过滤器" : "Size filters");
@@ -207,6 +244,13 @@ function applyLanguage() {
     element.textContent = ui(element.dataset.i18n);
   });
   updateThemeToggle();
+}
+
+function updateStaticToolbarIcons() {
+  const searchIcon = els.searchInput.closest("label")?.querySelector("span");
+  if (searchIcon) searchIcon.innerHTML = lucideIcon(`<circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/>`);
+  els.imageFileButton.innerHTML = lucideIcon(`<path d="M15 8h.01"/><rect width="16" height="16" x="4" y="4" rx="3"/><path d="M12 12v6"/><path d="m9 15 3-3 3 3"/>`);
+  els.languageToggle.innerHTML = lucideIcon(`<path d="m5 8 6 6"/><path d="m4 14 6-6 2-3"/><path d="M2 5h12"/><path d="M7 2h1"/><path d="m22 22-5-10-5 10"/><path d="M14 18h6"/>`);
 }
 
 async function init() {
@@ -369,11 +413,14 @@ function updateMobileTopMode() {
 
 function renderNav() {
   const items = navPlatforms();
-  const renderButton = item => `
-    <button class="platform-button ${isPlatformButtonActive(item.id) ? "is-active" : ""}" data-platform="${item.id}" data-label="${item.name}" type="button" aria-label="${item.name}">
+  const renderButton = item => {
+    const name = platformDisplayName(item);
+    return `
+    <button class="platform-button ${isPlatformButtonActive(item.id) ? "is-active" : ""}" data-platform="${item.id}" data-label="${name}" type="button" aria-label="${name}">
       <span class="icon-badge platform-icon platform-icon--${item.id} ${hasOfficialPlatformIcon(item) ? "official-icon" : ""} ${hasSvgPlatformIcon(item) ? "svg-data-icon" : ""}" style="${hasOfficialPlatformIcon(item) ? `--fallback-color:${item.color}` : `background:${item.color}`}" aria-hidden="true">${platformIconMarkup(item)}</span>
     </button>
   `;
+  };
 
   els.platformAllSlot.innerHTML = "";
   els.platformNav.innerHTML = items.map(renderButton).join("");
@@ -426,8 +473,24 @@ function platformSelectOptionMarkup(platform, extraClass = "") {
     : hasOfficialPlatformIcon(platform) ? `--fallback-color:${platform.color}` : `background:${platform.color}`;
   return `
     <span class="platform-select-icon platform-icon platform-icon--${platform.id} ${hasOfficialPlatformIcon(platform) ? "official-icon" : ""} ${hasSvgPlatformIcon(platform) ? "svg-data-icon" : ""} ${extraClass}" style="${iconStyle}">${platformIconMarkup(platform)}</span>
-    <span class="platform-select-name">${platform.name}</span>
+    <span class="platform-select-name">${platformDisplayName(platform)}</span>
   `;
+}
+
+function platformDisplayName(platform) {
+  if (!platform) return "";
+  if (platform.id === "all") return ui("all");
+  if (platform.id === "print") return ui("print");
+  if (state.language === "zh") return platform.name;
+  return PLATFORM_EN_NAMES[platform.id] || platform.name;
+}
+
+function localizedCategory(platform) {
+  if (!platform) return "";
+  if (platform.id === "all") return ui("all");
+  if (platform.id === "print") return ui("print");
+  if (state.language === "zh") return platform.category;
+  return CATEGORY_EN_NAMES[platform.category] || platform.category;
 }
 
 function showPlatformTitle(button) {
@@ -517,11 +580,15 @@ function platformIcon(id) {
 
 function controlIcon(id) {
   const icons = {
-    image: `<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 5h14v14H5V5Zm2 2v8.4l3-3 2.4 2.2 2.5-3.1L17 14.2V7H7Zm10 9.7-2.1-2.7-2.3 2.8-2.5-2.3L7.7 17H17v-.3ZM9.4 8.5a1.3 1.3 0 1 1 0 2.6 1.3 1.3 0 0 1 0-2.6Z"/></svg>`,
-    size: `<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M11 4h2.5L20 20h-2.6l-1.5-3.8H8.5L7 20H4.5L11 4Zm-1.6 10h5.7L12.3 6.8 9.4 14Z"/></svg>`,
-    sort: `<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 4h2v12.2l2.3-2.3 1.4 1.4L8 20l-4.7-4.7 1.4-1.4L7 16.2V4Zm7 1h7v2h-7V5Zm0 6h5v2h-5v-2Zm0 6h3v2h-3v-2Z"/></svg>`
+    image: lucideIcon(`<rect width="18" height="18" x="3" y="3" rx="2" ry="2"/><circle cx="9" cy="9" r="2"/><path d="m21 15-3.1-3.1a2 2 0 0 0-2.8 0L6 21"/>`),
+    size: lucideIcon(`<path d="M4 7V4h16v3"/><path d="M9 20h6"/><path d="M12 4v16"/>`),
+    sort: lucideIcon(`<path d="M3 6h18"/><path d="M7 12h10"/><path d="M10 18h4"/>`)
   };
   return icons[id] || "";
+}
+
+function lucideIcon(content) {
+  return `<svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">${content}</svg>`;
 }
 
 function renderFilters() {
@@ -740,10 +807,10 @@ function filteredPresets() {
       || (state.selectedPlatform === "print" && printPlatformIds.has(item.platformId));
     const inFilter = matchRatioFilter(item);
     const keywordText = [
-      platform.name,
+      platformDisplayName(platform),
       platform.short,
       platform.category,
-      sourcePlatform.name,
+      platformDisplayName(sourcePlatform),
       sourcePlatform.short,
       item.title,
       item.ratio,
@@ -866,14 +933,16 @@ function renderBoards(rows) {
 function createBoardCard(item, index, renderKey) {
     const platform = displayPlatformForItem(item);
     const sourcePlatform = getPlatform(item.platformId);
+    const platformName = platformDisplayName(platform);
+    const sourcePlatformName = platformDisplayName(sourcePlatform);
     const size = boardSize(item.width, item.height, 170, item.unit);
     const preview = previewForPreset(item, size);
-    const detail = [platform.name, sourcePlatform.id !== platform.id ? sourcePlatform.name : "", ...item.tags].filter(Boolean).join(" / ");
+    const detail = [platformName, sourcePlatform.id !== platform.id ? sourcePlatformName : "", ...item.tags].filter(Boolean).join(" / ");
     const showTitleIcon = !shouldHideCardPlatformIcon();
   const template = document.createElement("template");
   template.innerHTML = `
-      <button class="artboard-card" data-id="${item.id}" data-highlight-platform="${platform.id}" type="button" aria-label="${platform.name} ${item.title} ${formatSize(item)}" style="--card-index:${index}; view-transition-name:${cardTransitionName(item.id)}">
-        <div class="artboard-stage" style="--tooltip-offset:${Math.round(size.h / 2 + 8)}px">
+      <button class="artboard-card" data-id="${item.id}" data-highlight-platform="${platform.id}" type="button" aria-label="${platformName} ${item.title} ${formatSize(item)}" style="--card-index:${index}; view-transition-name:${cardTransitionName(item.id)}">
+        <div class="artboard-stage" style="--tooltip-offset:${Math.round(size.h / 2 + 3)}px">
           <div class="board-tooltip">${detail}</div>
           <div class="artboard ${preview ? "has-preview" : ""} ${state.showSizes ? "" : "hide-size"}" data-ratio="${item.ratio}" style="--board-w:${size.w}px; --board-h:${size.h}px; --size-font:${size.font}px">
             ${preview ? renderPreview(preview) : ""}
@@ -882,7 +951,7 @@ function createBoardCard(item, index, renderKey) {
         </div>
         <div class="board-info">
           <div class="board-title-row">
-            ${showTitleIcon ? `<span class="title-icon platform-icon platform-icon--${platform.id} ${hasOfficialPlatformIcon(platform) ? "official-icon" : ""} ${hasSvgPlatformIcon(platform) ? "svg-data-icon" : ""}" style="${hasOfficialPlatformIcon(platform) ? `--fallback-color:${platform.color}` : ""}" title="${platform.name}">${platformIconMarkup(platform)}</span>` : ""}
+            ${showTitleIcon ? `<span class="title-icon platform-icon platform-icon--${platform.id} ${hasOfficialPlatformIcon(platform) ? "official-icon" : ""} ${hasSvgPlatformIcon(platform) ? "svg-data-icon" : ""}" style="${hasOfficialPlatformIcon(platform) ? `--fallback-color:${platform.color}` : ""}" title="${platformName}">${platformIconMarkup(platform)}</span>` : ""}
             <strong>${item.title}</strong>
           </div>
         </div>
@@ -981,8 +1050,14 @@ function cardTransitionName(id) {
 }
 
 function updateThemeToggle() {
-  els.themeToggle.textContent = state.theme === "dark" ? "☼" : "◐";
+  els.themeToggle.innerHTML = themeIcon(state.theme);
   els.themeToggle.setAttribute("aria-label", state.theme === "dark" ? ui("switchLight") : ui("switchDark"));
+}
+
+function themeIcon(theme) {
+  return theme === "dark"
+    ? lucideIcon(`<circle cx="12" cy="12" r="4"/><path d="M12 2v2"/><path d="M12 20v2"/><path d="m4.93 4.93 1.41 1.41"/><path d="m17.66 17.66 1.41 1.41"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="m6.34 17.66-1.41 1.41"/><path d="m19.07 4.93-1.41 1.41"/>`)
+    : lucideIcon(`<path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/>`);
 }
 
 function renderPreview(preview) {
@@ -1226,12 +1301,14 @@ function openDetail(id) {
   if (!item) return;
   const platform = displayPlatformForItem(item);
   const sourcePlatform = getPlatform(item.platformId);
+  const platformName = platformDisplayName(platform);
+  const sourcePlatformName = platformDisplayName(sourcePlatform);
   const size = boardSize(item.width, item.height, 200, item.unit);
   activePreset = item;
 
   els.detailLogo.innerHTML = platformIconMarkup(platform);
   els.detailLogo.style.background = platform.color;
-  els.detailPlatform.textContent = sourcePlatform.id === platform.id ? `${platform.category} / ${platform.name}` : `${platform.name} / ${sourcePlatform.name}`;
+  els.detailPlatform.textContent = sourcePlatform.id === platform.id ? `${localizedCategory(platform)} / ${platformName}` : `${platformName} / ${sourcePlatformName}`;
   els.detailTitle.textContent = item.title;
   els.detailTags.textContent = item.tags.join(" · ");
   els.detailPreview.style.setProperty("--board-w", `${size.w}px`);
@@ -1240,7 +1317,7 @@ function openDetail(id) {
   els.detailSize.textContent = formatSize(item);
   els.detailRatio.textContent = item.ratio;
   els.detailUnit.textContent = item.unit;
-  els.detailCategory.textContent = platform.category;
+  els.detailCategory.textContent = localizedCategory(platform);
   els.detailDpi.textContent = item.dpi ? ui("dpiSuggestion", item.dpi) : ui("notApplicable");
   els.detailBleed.textContent = item.bleed;
   els.detailNote.textContent = item.note;
