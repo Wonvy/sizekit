@@ -1382,6 +1382,9 @@ h1 {
     width: 100%;
     transition: height .28s var(--ease);
   }
+  .platform-nav {
+    height: 100%;
+  }
   .platform-hover-title {
     display: none;
   }
@@ -1551,14 +1554,21 @@ h1 {
   body.is-mobile-compact-top .toolbar {
     top: 0;
     z-index: 230;
+    display: flex;
+    align-items: center;
     height: var(--compact-top-h);
     max-height: var(--compact-top-h);
     min-height: var(--compact-top-h);
-    padding: 12px 10px;
+    padding: 0 10px;
     background: transparent;
     backdrop-filter: none;
     -webkit-backdrop-filter: none;
     pointer-events: none;
+  }
+  body.is-mobile-compact-top .toolbar-inner {
+    align-items: center;
+    flex-wrap: nowrap;
+    height: 100%;
   }
   body.is-mobile-compact-top .platform-select {
     width: 136px;
@@ -1573,6 +1583,7 @@ h1 {
   body.is-mobile-compact-top .search-box,
   body.is-mobile-compact-top .filter-strip,
   body.is-mobile-compact-top .toolbar .header-actions {
+    display: none;
     opacity: 0;
     visibility: hidden;
     transform: translateY(-8px);

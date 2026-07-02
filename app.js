@@ -319,6 +319,9 @@ function bindEvents() {
     document.documentElement.dataset.theme = state.theme;
     localStorage.setItem("sizekit-theme", state.theme);
     updateThemeToggle();
+    renderNav();
+    renderPlatformSelect();
+    render();
   });
 
   els.languageToggle.addEventListener("click", () => {
@@ -552,7 +555,7 @@ function platformIconMarkup(platform) {
 }
 
 function platformSvgMarkup(platform) {
-  const rawSvg = platform.iconSvg || platform.svg || platform.svgData || platform.iconData;
+  const rawSvg = themedPlatformSvg(platform);
   if (typeof rawSvg !== "string") return "";
   const svg = rawSvg.trim();
   if (!svg) return "";
@@ -565,6 +568,27 @@ function platformSvgMarkup(platform) {
 
 function hasSvgPlatformIcon(platform) {
   return Boolean(platformSvgMarkup(platform));
+}
+
+function themedPlatformSvg(platform) {
+  if (!platform) return "";
+
+  const lightSvg = platform.iconSvgLight
+    || platform.lightIconSvg
+    || platform.svgLight
+    || platform.lightSvg
+    || platform.iconSvg
+    || platform.svg
+    || platform.svgData
+    || platform.iconData;
+  const darkSvg = platform.iconSvgDark
+    || platform.darkIconSvg
+    || platform.svgDark
+    || platform.darkSvg
+    || platform.iconSvgDarkData
+    || platform.darkIconData;
+
+  return state.theme === "dark" ? darkSvg || lightSvg : lightSvg || darkSvg;
 }
 
 function hasOfficialPlatformIcon(platform) {
